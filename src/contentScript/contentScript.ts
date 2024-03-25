@@ -3,7 +3,6 @@ import { PluginSettings } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers } from "@codemirror/view";
-import splitEditor from "./splitEditor";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -11,11 +10,6 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 			const extensionCompartment = new Compartment();
 			editorControl.addExtension([
 				extensionCompartment.of([]),
-				EditorView.baseTheme({
-					'& .cm-ext-split-panel > .cm-editor': {
-						'height': '50vh',
-					},
-				}),
 			]);
 
 			const updateSettings = (settings: PluginSettings) => {
@@ -44,15 +38,6 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						extensionCompartment.reconfigure(extensions),
 					],
 				});
-
-				if (settings.registerExtraVimCommands) {
-					const Vim = (editorControl as any).Vim;
-					if (Vim) {
-						Vim.defineEx('split', 'sp', () => {
-							splitEditor(editorControl.editor);
-						});
-					}
-				}
 			}
 
 			editorControl.registerCommand('cm6-extended-settings-update', (settings: PluginSettings) => {

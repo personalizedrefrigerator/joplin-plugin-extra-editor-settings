@@ -54,11 +54,6 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			value: false,
 			label: 'Highlight trailing spaces',
 		},
-		registerExtraVimCommands: {
-			...defaultSettingOptions,
-			value: false,
-			label: 'Register extra Vim mode commands',
-		}
 	};
 
 	const readSettings = async () => {
