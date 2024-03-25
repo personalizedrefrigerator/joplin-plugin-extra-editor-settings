@@ -1,15 +1,15 @@
 {
 	"manifest_version": 1,
 	"id": "io.github.personalizedrefrigerator.codemirror6-settings",
-	"app_min_version": "2.13",
+	"app_min_version": "2.14",
 	"version": "1.0.0",
 	"name": "CodeMirror 6 settings",
-	"description": "Extended options for the CodeMirror 6-based markdown editor, including line numbers and code folding.",
+	"description": "Line numbers, code folding, space highlighting, and other built-in options for the CodeMirror 6 editor.",
 	"author": "Henry Heino",
-	"homepage_url": "",
-	"repository_url": "",
-	"keywords": [],
-	"categories": [],
-	"screenshots": [],
+	"homepage_url": "https://github.com/personalizedrefrigerator/joplin-plugin-extra-cm6-settings",
+	"repository_url": "https://github.com/personalizedrefrigerator/joplin-plugin-extra-cm6-settings",
+	"keywords": [ "codemirror", "line"],
+	"categories": [ "editor" ],
+	"screenshots": [ "screenshots/screenshots.png" ],
 	"icons": {}
 }
