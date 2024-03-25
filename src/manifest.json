@@ -1,0 +1,15 @@
+{
+	"manifest_version": 1,
+	"id": "io.github.personalizedrefrigerator.codemirror6-settings",
+	"app_min_version": "2.13",
+	"version": "1.0.0",
+	"name": "CodeMirror 6 settings",
+	"description": "Extended options for the CodeMirror 6-based markdown editor, including line numbers and code folding.",
+	"author": "Henry Heino",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": [],
+	"categories": [],
+	"screenshots": [],
+	"icons": {}
+}
