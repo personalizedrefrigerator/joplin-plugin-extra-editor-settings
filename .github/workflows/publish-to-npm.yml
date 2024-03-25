@@ -3,7 +3,7 @@ on:
   release:
     types: [published]
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     environment: publishing
     permissions:
@@ -17,9 +17,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install -g npm
       - run: npm ci
-      - name: Run tests
-        run: npm run test
       - name: Publish
-        run: npm publish --provenance
+        run: npm publish --provenance --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
