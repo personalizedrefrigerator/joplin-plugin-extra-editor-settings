@@ -7,6 +7,10 @@
     "updateVersion": "webpack --env joplin-plugin-config=updateVersion",
     "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/personalizedrefrigerator/joplin-plugin-extra-cm6-settings"
+  },
   "license": "MIT",
   "keywords": [
     "joplin-plugin"
