@@ -12,6 +12,8 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 				extensionCompartment.of([]),
 			]);
 
+			const editor: EditorView = editorControl.editor;
+
 			const updateSettings = (settings: PluginSettings) => {
 				const extensions = [
 					settings.lineNumbers ? [ lineNumbers(), highlightActiveLineGutter(), gutter({}) ] : [],
@@ -33,19 +35,18 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.highlightSpaces ? highlightWhitespace() : [],
 					settings.highlightTrailingSpaces ? highlightTrailingWhitespace() : [],
 				];
-				(editorControl.editor as EditorView).dispatch({
+				editor.dispatch({
 					effects: [
 						extensionCompartment.reconfigure(extensions),
 					],
 				});
-			}
+			};
 
 			editorControl.registerCommand('cm6-extended-settings-update', (settings: PluginSettings) => {
 				updateSettings(settings);
 			});
 			const settings: PluginSettings = await context.postMessage('getSettings');
 			updateSettings(settings);
-			(window as any).ec = editorControl;
 		},
 	}
 }

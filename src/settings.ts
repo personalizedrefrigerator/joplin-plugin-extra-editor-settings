@@ -1,7 +1,7 @@
 import joplin from "api";
 import { SettingItem, SettingItemType, SettingStorage } from "api/types";
 import { PluginSettings } from "./types";
-import localization from "localization";
+import localization from "./localization";
 
 export const registerSettings = async (applySettings: (settings: PluginSettings)=>void) => {
 	const sectionName = 'codemirror6-extended-options';
