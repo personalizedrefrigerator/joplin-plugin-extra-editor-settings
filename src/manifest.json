@@ -10,6 +10,6 @@
 	"repository_url": "https://github.com/personalizedrefrigerator/joplin-plugin-extra-cm6-settings",
 	"keywords": [ "codemirror", "line"],
 	"categories": [ "editor" ],
-	"screenshots": [ { "src": "screenshots/screenshot.png", "label": "Screenshot: Shows line numbers, autocomplete, and folding in use" } ],
+	"screenshots": [ { "src": "images/screenshot.png", "label": "Screenshot: Shows line numbers, autocomplete, and folding in use" } ],
 	"icons": {}
 }
