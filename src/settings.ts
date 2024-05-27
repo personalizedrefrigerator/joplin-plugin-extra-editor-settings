@@ -1,12 +1,13 @@
 import joplin from "api";
 import { SettingItem, SettingItemType, SettingStorage } from "api/types";
 import { PluginSettings } from "./types";
+import localization from "localization";
 
 export const registerSettings = async (applySettings: (settings: PluginSettings)=>void) => {
 	const sectionName = 'codemirror6-extended-options';
 	await joplin.settings.registerSection(sectionName, {
-		label: 'Extra editor settings',
-		description: 'Additional settings for Joplin\'s beta and mobile markdown editors.',
+		label: localization.settings__appName,
+		description: localization.settings__description,
 		iconName: 'fas fa-edit',
 	});
 
@@ -21,38 +22,38 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 		lineNumbers: {
 			...defaultSettingOptions,
 			value: true,
-			label: 'Show line numbers',
+			label: localization.setting__showLineNumber,
 		},
 		codeFolding: {
 			...defaultSettingOptions,
 			value: false,
-			label: 'Enable code folding',
+			label: localization.setting__enableCodeFolding,
 		},
 		enableAutocomplete: {
 			...defaultSettingOptions,
 			value: false,
-			label: 'Enable autocomplete',
+			label: localization.setting__enableAutocomplete,
 		},
 		highlightActiveLineGutter: {
 			...defaultSettingOptions,
 			value: true,
-			label: 'Highlight the gutter for the active line',
-			description: 'Requires "show line numbers" to be enabled.',
+			label: localization.setting__highlightLineGutter,
+			description: localization.setting__highlightLineGutter__description,
 		},
 		highlightActiveLine: {
 			...defaultSettingOptions,
 			value: false,
-			label: 'Highlight active line',
+			label: localization.setting__highlightActiveLine,
 		},
 		highlightSpaces: {
 			...defaultSettingOptions,
 			value: false,
-			label: 'Highlight spaces',
+			label: localization.setting__highlightSpaces,
 		},
 		highlightTrailingSpaces: {
 			...defaultSettingOptions,
 			value: false,
-			label: 'Highlight trailing spaces',
+			label: localization.setting__highlightTrailingSpaces,
 		},
 	};
 
