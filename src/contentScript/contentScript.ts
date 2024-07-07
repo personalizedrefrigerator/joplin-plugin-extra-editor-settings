@@ -1,8 +1,9 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
-import { PluginSettings } from "../types";
+import { PluginSettings, WebViewMessageType } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
-import { Compartment } from "@codemirror/state";
+import { Compartment, EditorSelection } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers } from "@codemirror/view";
+import persistentCursorPosition from "./persistentCursorPosition";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -34,6 +35,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.highlightActiveLineGutter ? highlightActiveLineGutter() : [],
 					settings.highlightSpaces ? highlightWhitespace() : [],
 					settings.highlightTrailingSpaces ? highlightTrailingWhitespace() : [],
+					settings.persistentCursorPosition ? persistentCursorPosition(editorControl, context) : [],
 				];
 				editor.dispatch({
 					effects: [
@@ -45,7 +47,10 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 			editorControl.registerCommand('cm6-extended-settings-update', (settings: PluginSettings) => {
 				updateSettings(settings);
 			});
-			const settings: PluginSettings = await context.postMessage('getSettings');
+
+			await context.postMessage({ type: WebViewMessageType.Loaded });
+
+			const settings: PluginSettings = await context.postMessage({ type: WebViewMessageType.GetSettings });
 			updateSettings(settings);
 		},
 	}

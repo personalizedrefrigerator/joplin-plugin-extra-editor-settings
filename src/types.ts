@@ -8,4 +8,26 @@ export interface PluginSettings {
 	highlightActiveLineGutter: boolean;
 	highlightSpaces: boolean;
 	highlightTrailingSpaces: boolean;
+	persistentCursorPosition: boolean;
 }
+
+export enum WebViewMessageType {
+	SelectionUpdated = 'selUpdated',
+	GetSettings = 'getSettings',
+	Loaded = 'loaded',
+}
+
+interface GetSettingsMessage {
+	type: WebViewMessageType.GetSettings;
+}
+
+interface EditorLoadedMessage {
+	type: WebViewMessageType.Loaded;
+}
+
+interface CursorPositionChangedMessage {
+	type: WebViewMessageType.SelectionUpdated;
+	mainIndex: number;
+}
+
+export type WebViewMessage = GetSettingsMessage | EditorLoadedMessage | CursorPositionChangedMessage;

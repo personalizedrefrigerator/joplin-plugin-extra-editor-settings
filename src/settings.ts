@@ -55,6 +55,11 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			value: false,
 			label: localization.setting__highlightTrailingSpaces,
 		},
+		persistentCursorPosition: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__persistentCursorPosition,
+		},
 	};
 
 	const readSettings = async () => {
