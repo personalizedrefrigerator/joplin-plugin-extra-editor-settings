@@ -1,5 +1,5 @@
 
-# v1.1.0
+# v1.1.0 and v1.1.1
 
 - New settings:
     - Background grid pattern.
