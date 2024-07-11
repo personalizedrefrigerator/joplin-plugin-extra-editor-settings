@@ -15,6 +15,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 			const editor: EditorView = editorControl.editor;
 
 			const updateSettings = (settings: PluginSettings) => {
+				const textDirection = settings.textDirection ?? TextDirection.Auto;
 				const extensions = [
 					settings.lineNumbers ? [ lineNumbers(), highlightActiveLineGutter(), gutter({}) ] : [],
 					settings.codeFolding ? [ codeFolding(), foldGutter(), gutter({}) ] : [],
@@ -38,10 +39,10 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.gridPattern ? [
 						EditorView.theme({
 							'&.cm-editor .cm-scroller': {
-								'--grid-color': 'color-mix(in srgb, var(--joplin-color) 30%, transparent)',
+								'--grid-color': 'color-mix(in srgb, var(--joplin-color) 14%, transparent)',
 								background: `
-									linear-gradient(transparent 48%, var(--grid-color) 50%, transparent 51%, transparent),
-									linear-gradient(90deg, transparent 48%, var(--grid-color) 50%, transparent 51%, transparent)
+									linear-gradient(transparent 48%, var(--grid-color) 50%, transparent 52%, transparent),
+									linear-gradient(90deg, transparent 48%, var(--grid-color) 50%, transparent 52%, transparent)
 								`,
 								backgroundAttachment: 'local',
 								backgroundSize: '1em 1em',
@@ -49,11 +50,13 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						}),
 					] : [],
 
-					((settings.textDirection ?? TextDirection.Auto) !== TextDirection.Auto) ? [
+					// ?? Auto: Works around a bug in older versions of Joplin where default setting
+					// values were not applied.
+					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({
 							// Repeat .cm-editor for additional specificity
 							'&.cm-editor.cm-editor': {
-								direction: settings.textDirection === TextDirection.RightToLeft ? 'rtl' : 'ltr',
+								direction: textDirection === TextDirection.RightToLeft ? 'rtl' : 'ltr',
 							},
 						}),
 					] : [],
