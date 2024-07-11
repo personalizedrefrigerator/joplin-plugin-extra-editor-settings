@@ -1,5 +1,5 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
-import { PluginSettings } from "../types";
+import { PluginSettings, TextDirection } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers } from "@codemirror/view";
@@ -34,6 +34,29 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.highlightActiveLineGutter ? highlightActiveLineGutter() : [],
 					settings.highlightSpaces ? highlightWhitespace() : [],
 					settings.highlightTrailingSpaces ? highlightTrailingWhitespace() : [],
+
+					settings.gridPattern ? [
+						EditorView.theme({
+							'&.cm-editor .cm-scroller': {
+								'--grid-color': 'color-mix(in srgb, var(--joplin-color) 30%, transparent)',
+								background: `
+									linear-gradient(transparent 48%, var(--grid-color) 50%, transparent 51%, transparent),
+									linear-gradient(90deg, transparent 48%, var(--grid-color) 50%, transparent 51%, transparent)
+								`,
+								backgroundAttachment: 'local',
+								backgroundSize: '1em 1em',
+							},
+						}),
+					] : [],
+
+					((settings.textDirection ?? TextDirection.Auto) !== TextDirection.Auto) ? [
+						EditorView.theme({
+							// Repeat .cm-editor for additional specificity
+							'&.cm-editor.cm-editor': {
+								direction: settings.textDirection === TextDirection.RightToLeft ? 'rtl' : 'ltr',
+							},
+						}),
+					] : [],
 				];
 				editor.dispatch({
 					effects: [

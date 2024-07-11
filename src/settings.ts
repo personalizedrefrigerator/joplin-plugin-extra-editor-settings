@@ -1,6 +1,6 @@
 import joplin from "api";
 import { SettingItem, SettingItemType, SettingStorage } from "api/types";
-import { PluginSettings } from "./types";
+import { PluginSettings, TextDirection } from "./types";
 import localization from "./localization";
 
 export const registerSettings = async (applySettings: (settings: PluginSettings)=>void) => {
@@ -54,6 +54,26 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			...defaultSettingOptions,
 			value: false,
 			label: localization.setting__highlightTrailingSpaces,
+		},
+		gridPattern: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__showGridPattern,
+		},
+		textDirection: {
+			...defaultSettingOptions,
+			type: SettingItemType.String,
+
+			advanced: true,
+			value: TextDirection.Auto,
+			label: localization.setting__textDirection,
+			description: localization.setting__textDirection__description,
+			isEnum: true,
+			options: {
+				[TextDirection.Auto]: localization.setting__textDirection__auto,
+				[TextDirection.LeftToRight]: localization.setting__textDirection__leftToRight,
+				[TextDirection.RightToLeft]: localization.setting__textDirection__rightToLeft,
+			},
 		},
 	};
 
