@@ -54,8 +54,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					// values were not applied.
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({
-							// Repeat .cm-editor for additional specificity
-							'&.cm-editor.cm-editor': {
+							'& .cm-line': {
 								direction: textDirection === TextDirection.RightToLeft ? 'rtl' : 'ltr',
 							},
 						}),
