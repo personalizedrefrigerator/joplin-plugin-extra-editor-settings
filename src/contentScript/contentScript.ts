@@ -39,10 +39,10 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.gridPattern ? [
 						EditorView.theme({
 							'&.cm-editor .cm-scroller': {
-								'--grid-color': 'color-mix(in srgb, var(--joplin-color) 14%, transparent)',
+								'--grid-color': 'color-mix(in srgb, var(--joplin-color) 6%, transparent)',
 								background: `
-									linear-gradient(transparent 48%, var(--grid-color) 50%, transparent 52%, transparent),
-									linear-gradient(90deg, transparent 48%, var(--grid-color) 50%, transparent 52%, transparent)
+									linear-gradient(var(--grid-color) 1px, transparent 2px, transparent),
+									linear-gradient(90deg, var(--grid-color) 1px, transparent 2px, transparent)
 								`,
 								backgroundAttachment: 'local',
 								backgroundSize: '1em 1em',
