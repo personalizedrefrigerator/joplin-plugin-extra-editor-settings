@@ -2,7 +2,7 @@
 	"manifest_version": 1,
 	"id": "io.github.personalizedrefrigerator.codemirror6-settings",
 	"app_min_version": "2.14",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"name": "Extra markdown editor settings",
 	"description": "Line numbers, code folding, space highlighting, and other built-in options for the CodeMirror 6 editor.",
 	"author": "Henry Heino",
@@ -11,5 +11,8 @@
 	"keywords": [ "codemirror", "line"],
 	"categories": [ "editor" ],
 	"screenshots": [ { "src": "images/screenshot.png", "label": "Screenshot: Shows line numbers, autocomplete, and folding in use" } ],
-	"icons": {}
+	"icons": {
+		"128": "images/icon-128.png",
+		"256": "images/icon-256.autoinvert.png"
+	}
 }
