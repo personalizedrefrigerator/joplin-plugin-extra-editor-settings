@@ -50,8 +50,6 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						}),
 					] : [],
 
-					// ?? Auto: Works around a bug in older versions of Joplin where default setting
-					// values were not applied.
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({
 							'& .cm-line': {
