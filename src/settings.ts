@@ -55,6 +55,11 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			value: false,
 			label: localization.setting__highlightTrailingSpaces,
 		},
+		highlightSelectionMatches: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__highlightSelectionMatches,
+		},
 		gridPattern: {
 			...defaultSettingOptions,
 			value: false,

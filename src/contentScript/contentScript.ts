@@ -3,6 +3,7 @@ import { PluginSettings, TextDirection } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers } from "@codemirror/view";
+import { highlightSelectionMatches } from '@codemirror/search';
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -35,6 +36,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.highlightActiveLineGutter ? highlightActiveLineGutter() : [],
 					settings.highlightSpaces ? highlightWhitespace() : [],
 					settings.highlightTrailingSpaces ? highlightTrailingWhitespace() : [],
+					settings.highlightSelectionMatches ? highlightSelectionMatches() : [],
 
 					settings.gridPattern ? [
 						EditorView.theme({

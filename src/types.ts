@@ -14,6 +14,7 @@ export interface PluginSettings {
 	highlightActiveLineGutter: boolean;
 	highlightSpaces: boolean;
 	highlightTrailingSpaces: boolean;
+	highlightSelectionMatches: boolean;
 	gridPattern: boolean;
 
 	textDirection: TextDirection,

@@ -9,6 +9,7 @@ interface AppLocalization {
 	setting__highlightActiveLine: string;
 	setting__highlightSpaces: string;
 	setting__highlightTrailingSpaces: string;
+	setting__highlightSelectionMatches: string;
 	setting__showGridPattern: string;
 	setting__textDirection: string;
 	setting__textDirection__description: string;
@@ -29,6 +30,7 @@ const defaultStrings: AppLocalization = {
 	setting__highlightActiveLine: 'Highlight active line',
 	setting__highlightSpaces: 'Highlight spaces',
 	setting__highlightTrailingSpaces: 'Highlight trailing spaces',
+	setting__highlightSelectionMatches: 'Highlight selection matches',
 
 	setting__showGridPattern: 'Show background grid pattern',
 
