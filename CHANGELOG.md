@@ -1,3 +1,9 @@
+# v1.2.1
+
+- Packaging fixes:
+	- Don't re-bundle `@codemirror/search` with the plugin.
+	- Bump minimum Joplin version to 3.0 to use Joplin's `@codemirror/search` (requires this [upstream commit](https://github.com/laurent22/joplin/commit/c1ae449ce2a9aaf5a789c9ac731081b8747af14f)).
+
 # v1.2.0
 
 - Features:
