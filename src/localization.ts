@@ -11,11 +11,14 @@ interface AppLocalization {
 	setting__highlightTrailingSpaces: string;
 	setting__highlightSelectionMatches: string;
 	setting__showGridPattern: string;
+	setting__showWordCount: string;
 	setting__textDirection: string;
 	setting__textDirection__description: string;
 	setting__textDirection__auto: string;
 	setting__textDirection__leftToRight: string;
 	setting__textDirection__rightToLeft: string;
+
+	words: string;
 }
 
 const defaultStrings: AppLocalization = {
@@ -33,12 +36,15 @@ const defaultStrings: AppLocalization = {
 	setting__highlightSelectionMatches: 'Highlight selection matches',
 
 	setting__showGridPattern: 'Show background grid pattern',
+	setting__showWordCount: 'Show word count',
 
 	setting__textDirection: 'Text direction',
 	setting__textDirection__description: 'Overrides the default direction of text in the CodeMirror editor. For most users, this should be set to "auto".',
 	setting__textDirection__auto: 'Auto',
 	setting__textDirection__leftToRight: 'Left-to-right',
 	setting__textDirection__rightToLeft: 'Right-to-left',
+
+	words: 'Words',
 };
 
 const localizations: Record<string, AppLocalization> = {

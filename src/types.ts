@@ -16,6 +16,7 @@ export interface PluginSettings {
 	highlightTrailingSpaces: boolean;
 	highlightSelectionMatches: boolean;
 	gridPattern: boolean;
+	wordCount: boolean;
 
 	textDirection: TextDirection,
 }

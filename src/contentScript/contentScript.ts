@@ -2,8 +2,9 @@ import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/typ
 import { PluginSettings, TextDirection } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
-import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers } from "@codemirror/view";
+import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers, showPanel } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
+import wordCountPanel from "./wordCountPanel";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -51,6 +52,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 							},
 						}),
 					] : [],
+					settings.wordCount ? [showPanel.of(wordCountPanel)] : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

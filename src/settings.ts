@@ -65,6 +65,11 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			value: false,
 			label: localization.setting__showGridPattern,
 		},
+		wordCount: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__showWordCount,
+		},
 		textDirection: {
 			...defaultSettingOptions,
 			type: SettingItemType.String,
