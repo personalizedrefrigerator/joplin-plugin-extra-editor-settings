@@ -1,3 +1,8 @@
+# v1.3.0
+
+- Features:
+	- New setting: Show word count
+
 # v1.2.1
 
 - Packaging fixes:
