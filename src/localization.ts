@@ -34,7 +34,7 @@ interface AppLocalization {
 
 const defaultStrings: AppLocalization = {
 	settings__appName: 'Extra editor settings',
-	settings__description: 'Additional settings for Joplin\'s beta and mobile markdown editors.',
+	settings__description: 'Additional settings for Joplin\'s beta and mobile Markdown editors.',
 	setting__showLineNumber: 'Show line numbers',
 	setting__enableCodeFolding: 'Enable code folding',
 	setting__enableAutocomplete: 'Enable autocomplete',

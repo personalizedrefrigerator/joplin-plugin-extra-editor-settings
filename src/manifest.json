@@ -4,7 +4,7 @@
 	"app_min_version": "3.0.3",
 	"mobile_min_version": "3.0",
 	"version": "1.3.0",
-	"name": "Extra markdown editor settings",
+	"name": "Extra Markdown editor settings",
 	"description": "Line numbers, code folding, space highlighting, word count, and other built-in options for the CodeMirror 6 editor.",
 	"author": "Henry Heino",
 	"homepage_url": "https://github.com/personalizedrefrigerator/joplin-plugin-extra-cm6-settings",
