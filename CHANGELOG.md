@@ -1,3 +1,8 @@
+# v1.4.0
+
+- Features:
+	- New setting: Show sync indicator in editor
+
 # v1.3.0
 
 - Features:
