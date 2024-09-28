@@ -1,7 +1,7 @@
 import { EditorView, Panel, showPanel, ViewUpdate } from "@codemirror/view";
 import { PostMessageHandler } from "../../api/types";
 import { SyncIndicatorMode, SyncStatus } from "../types";
-import { Extension } from "@codemirror/state";
+import { AnnotationType, EditorState, Extension } from "@codemirror/state";
 import localization from "../localization";
 import syncIcon from "./icons/syncIcon";
 import iconDataUrl from "./icons/iconDataUrl";
@@ -67,8 +67,13 @@ const makeSyncIndicatorPanel = (postMessage: PostMessageHandler) => (_view: Edit
 		dom: container,
 		update: (update: ViewUpdate) => {
 			if (update.docChanged) {
-				hasUnsyncedChanges = true;
-				updateContent();
+				// Only refresh if changed by a user. This avoids showing "unsynced changes" after switching
+				// notes on desktop.
+				const isUserChange = update.transactions.some(t => t.isUserEvent('input') || t.isUserEvent('delete'));
+				if (isUserChange) {
+					hasUnsyncedChanges = true;
+					updateContent();
+				}
 			}
 		},
 		destroy: () => {
