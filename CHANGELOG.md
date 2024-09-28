@@ -1,3 +1,9 @@
+
+# v1.4.1
+
+- Bug fixes
+	- Fix sync indicator may incorrectly indicate unsynced changes after switching notes on desktop.
+
 # v1.4.0
 
 - Features:
