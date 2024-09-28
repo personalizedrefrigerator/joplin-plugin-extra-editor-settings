@@ -1,6 +1,6 @@
 import joplin from "api";
 import { SettingItem, SettingItemType, SettingStorage } from "api/types";
-import { PluginSettings, TextDirection } from "./types";
+import { PluginSettings, SyncIndicatorMode, TextDirection } from "./types";
 import localization from "./localization";
 
 export const registerSettings = async (applySettings: (settings: PluginSettings)=>void) => {
@@ -69,6 +69,19 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			...defaultSettingOptions,
 			value: false,
 			label: localization.setting__showWordCount,
+		},
+		syncIndicator: {
+			...defaultSettingOptions,
+			type: SettingItemType.String,
+			value: SyncIndicatorMode.NotShown,
+			label: localization.setting__showVisualSyncIndicator,
+			description: localization.setting__showVisualSyncIndicator__description,
+			isEnum: true,
+			options: {
+				[SyncIndicatorMode.NotShown]: localization.no,
+				[SyncIndicatorMode.Text]: localization.setting__showVisualSyncIndicator__textual,
+				[SyncIndicatorMode.Icon]: localization.setting__showVisualSyncIndicator__icon,
+			},
 		},
 		textDirection: {
 			...defaultSettingOptions,

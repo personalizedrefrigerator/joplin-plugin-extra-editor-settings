@@ -1,10 +1,11 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
-import { PluginSettings, TextDirection } from "../types";
+import { PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers, showPanel } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
 import wordCountPanel from "./wordCountPanel";
+import syncIndicatorPanel from "./syncIndicatorPanel";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -52,7 +53,10 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 							},
 						}),
 					] : [],
-					settings.wordCount ? [showPanel.of(wordCountPanel)] : [],
+					settings.wordCount ? [wordCountPanel] : [],
+					(settings.syncIndicator && settings.syncIndicator !== SyncIndicatorMode.NotShown) ? [
+						syncIndicatorPanel(settings.syncIndicator, message => context.postMessage(message))
+					] : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

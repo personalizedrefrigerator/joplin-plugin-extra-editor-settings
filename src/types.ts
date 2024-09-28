@@ -5,6 +5,12 @@ export enum TextDirection {
 	RightToLeft = 'rtl',
 }
 
+export enum SyncIndicatorMode {
+	NotShown = 'not-shown',	
+	Text = 'text',	
+	Icon = 'icon',	
+}
+
 export interface PluginSettings {
 	lineNumbers: boolean;
 	codeFolding: boolean;
@@ -17,6 +23,13 @@ export interface PluginSettings {
 	highlightSelectionMatches: boolean;
 	gridPattern: boolean;
 	wordCount: boolean;
+	syncIndicator: SyncIndicatorMode;
 
 	textDirection: TextDirection,
+}
+
+export enum SyncStatus {
+	NotSyncing = 'not-syncing',
+	Syncing = 'syncing',
+	SyncedWithErrors = 'synced-with-errors',
 }

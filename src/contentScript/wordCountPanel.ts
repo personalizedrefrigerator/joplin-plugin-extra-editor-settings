@@ -1,5 +1,5 @@
 import { EditorState } from "@codemirror/state";
-import { EditorView, Panel, ViewUpdate } from "@codemirror/view";
+import { EditorView, Panel, showPanel, ViewUpdate } from "@codemirror/view";
 import localization from "../localization";
 
 const wordCountPanel = (view: EditorView): Panel => {
@@ -38,4 +38,4 @@ const wordCountPanel = (view: EditorView): Panel => {
 	};
 };
 
-export default wordCountPanel;
+export default showPanel.of(wordCountPanel);

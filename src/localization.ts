@@ -18,7 +18,18 @@ interface AppLocalization {
 	setting__textDirection__leftToRight: string;
 	setting__textDirection__rightToLeft: string;
 
+	setting__showVisualSyncIndicator: string;
+	setting__showVisualSyncIndicator__description: string;
+	setting__showVisualSyncIndicator__textual: string;
+	setting__showVisualSyncIndicator__icon: string;
+
+	sync_status__not_syncing: string;
+	sync_status__syncing: string;
+	sync_status__synced_with_errors: string;
+
 	words: string;
+	yes: string;
+	no: string;
 }
 
 const defaultStrings: AppLocalization = {
@@ -37,6 +48,8 @@ const defaultStrings: AppLocalization = {
 
 	setting__showGridPattern: 'Show background grid pattern',
 	setting__showWordCount: 'Show word count',
+	setting__showVisualSyncIndicator: 'Show visual sync indicator',
+	setting__showVisualSyncIndicator__description: 'Shows the sync status in the Markdown editor.',
 
 	setting__textDirection: 'Text direction',
 	setting__textDirection__description: 'Overrides the default direction of text in the CodeMirror editor. For most users, this should be set to "auto".',
@@ -44,7 +57,16 @@ const defaultStrings: AppLocalization = {
 	setting__textDirection__leftToRight: 'Left-to-right',
 	setting__textDirection__rightToLeft: 'Right-to-left',
 
+	setting__showVisualSyncIndicator__textual: 'With text',
+	setting__showVisualSyncIndicator__icon: 'With an icon',
+
+	sync_status__not_syncing: 'Not syncing',
+	sync_status__syncing: 'Syncing...',
+	sync_status__synced_with_errors: 'Failed to sync',
+
 	words: 'Words',
+	yes: 'Yes',
+	no: 'No',
 };
 
 const localizations: Record<string, AppLocalization> = {
