@@ -57,6 +57,15 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					(settings.syncIndicator && settings.syncIndicator !== SyncIndicatorMode.NotShown) ? [
 						syncIndicatorPanel(settings.syncIndicator, message => context.postMessage(message))
 					] : [],
+					settings.editorMaximumWidth && settings.editorMaximumWidth !== 'none' ? (
+						EditorView.theme({
+							'&.cm-editor .cm-content': {
+								maxWidth: `${settings.editorMaximumWidth}`,
+								marginLeft: 'auto',
+								marginRight: 'auto',
+							},
+						})
+					) : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

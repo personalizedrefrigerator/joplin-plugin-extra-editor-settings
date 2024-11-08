@@ -21,6 +21,7 @@ export interface PluginSettings {
 	highlightSpaces: boolean;
 	highlightTrailingSpaces: boolean;
 	highlightSelectionMatches: boolean;
+	editorMaximumWidth: string;
 	gridPattern: boolean;
 	wordCount: boolean;
 	syncIndicator: SyncIndicatorMode;

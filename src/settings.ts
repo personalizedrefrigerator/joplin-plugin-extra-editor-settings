@@ -2,6 +2,7 @@ import joplin from "api";
 import { SettingItem, SettingItemType, SettingStorage } from "api/types";
 import { PluginSettings, SyncIndicatorMode, TextDirection } from "./types";
 import localization from "./localization";
+import { isMobile } from "./utils/isMobile";
 
 export const registerSettings = async (applySettings: (settings: PluginSettings)=>void) => {
 	const sectionName = 'codemirror6-extended-options';
@@ -10,6 +11,7 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 		description: localization.settings__description,
 		iconName: 'fas fa-edit',
 	});
+	const onMobile = await isMobile();
 
 	const defaultSettingOptions = {
 		section: sectionName,
@@ -59,6 +61,28 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			...defaultSettingOptions,
 			value: false,
 			label: localization.setting__highlightSelectionMatches,
+		},
+		editorMaximumWidth: {
+			...defaultSettingOptions,
+			public: onMobile,
+
+			value: 'none',
+
+			options: {
+				['none']: localization.setting__editorMaximumWidth__none,
+				['300px']: '300 (small)',
+				['400px']: '400',
+				['500px']: '500',
+				['600px']: '600',
+				['800px']: '800',
+				['1000px']: '1000',
+				['1500px']: '1500 (large)',
+			},
+
+			type: SettingItemType.String,
+			isEnum: true,
+			label: localization.setting__editorMaximumWidth,
+			description: localization.setting__editorMaximumWidth__description,
 		},
 		gridPattern: {
 			...defaultSettingOptions,

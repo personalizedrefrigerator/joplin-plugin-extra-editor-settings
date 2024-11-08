@@ -18,6 +18,10 @@ interface AppLocalization {
 	setting__textDirection__leftToRight: string;
 	setting__textDirection__rightToLeft: string;
 
+	setting__editorMaximumWidth: string;
+	setting__editorMaximumWidth__description: string;
+	setting__editorMaximumWidth__none: string;
+
 	setting__showVisualSyncIndicator: string;
 	setting__showVisualSyncIndicator__description: string;
 	setting__showVisualSyncIndicator__textual: string;
@@ -50,6 +54,10 @@ const defaultStrings: AppLocalization = {
 	setting__showWordCount: 'Show word count',
 	setting__showVisualSyncIndicator: 'Show visual sync indicator',
 	setting__showVisualSyncIndicator__description: 'Shows the sync status in the Markdown editor.',
+
+	setting__editorMaximumWidth: 'Editor maximum width',
+	setting__editorMaximumWidth__description: 'Setting this to a positive number (e.g. 600) centers the editor and prevents it from having a width larger than this size. Set this to "none" for the editor to fill the screen.',
+	setting__editorMaximumWidth__none: 'None',
 
 	setting__textDirection: 'Text direction',
 	setting__textDirection__description: 'Overrides the default direction of text in the CodeMirror editor. For most users, this should be set to "auto".',
