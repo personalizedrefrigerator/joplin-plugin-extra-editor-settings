@@ -1,3 +1,7 @@
+# v1.5.0
+
+- Features:
+	- (Mobile only) Setting for editor maximum width.
 
 # v1.4.1
 
