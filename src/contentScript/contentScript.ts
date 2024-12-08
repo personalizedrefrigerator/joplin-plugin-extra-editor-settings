@@ -22,6 +22,20 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 				const extensions = [
 					settings.lineNumbers ? [ lineNumbers(), highlightActiveLineGutter(), gutter({}) ] : [],
 					settings.codeFolding ? [ codeFolding(), foldGutter(), gutter({}) ] : [],
+					settings.lineWrapping ? [] : [
+						EditorView.theme({
+							'& .cm-content': {
+								'white-space': 'pre',
+							},
+							'&': {
+								// On desktop, disabling word-wrapping by default also causes
+								// the viewer to shrink when the editor has long lines. Setting
+								// width to 0  seems to fix this issue:
+								width: '0 !important',
+								'min-width': '100%',
+							},
+						}),
+					],
 					editorControl.joplinExtensions.enableLanguageDataAutocomplete.of(settings.enableAutocomplete),
 					settings.highlightActiveLine ? [
 						highlightActiveLine(),

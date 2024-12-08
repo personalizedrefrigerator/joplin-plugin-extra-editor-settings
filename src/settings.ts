@@ -31,6 +31,11 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			value: false,
 			label: localization.setting__enableCodeFolding,
 		},
+		lineWrapping: {
+			...defaultSettingOptions,
+			value: true,
+			label: localization.setting__lineWrapping,
+		},
 		enableAutocomplete: {
 			...defaultSettingOptions,
 			value: false,

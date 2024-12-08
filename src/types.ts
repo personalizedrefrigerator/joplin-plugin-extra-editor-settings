@@ -15,6 +15,7 @@ export interface PluginSettings {
 	lineNumbers: boolean;
 	codeFolding: boolean;
 	enableAutocomplete: boolean;
+	lineWrapping: boolean;
 
 	highlightActiveLine: boolean;
 	highlightActiveLineGutter: boolean;

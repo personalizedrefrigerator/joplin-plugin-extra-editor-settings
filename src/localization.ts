@@ -4,6 +4,7 @@ interface AppLocalization {
 	setting__showLineNumber: string;
 	setting__enableCodeFolding: string;
 	setting__enableAutocomplete: string;
+	setting__lineWrapping: string;
 	setting__highlightLineGutter: string;
 	setting__highlightLineGutter__description: string;
 	setting__highlightActiveLine: string;
@@ -42,6 +43,7 @@ const defaultStrings: AppLocalization = {
 	setting__showLineNumber: 'Show line numbers',
 	setting__enableCodeFolding: 'Enable code folding',
 	setting__enableAutocomplete: 'Enable autocomplete',
+	setting__lineWrapping: 'Enable line wrapping',
 
 	setting__highlightLineGutter: 'Highlight the gutter for the active line',
 	setting__highlightLineGutter__description: 'Requires "show line numbers" to be enabled.',
