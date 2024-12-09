@@ -1,6 +1,8 @@
-import { EditorView, WidgetType } from "@codemirror/view";
-import makeConcealExtension from "./makeReplaceExtension";
+import { EditorView, WidgetType } from '@codemirror/view';
+import makeConcealExtension from './makeReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
+
+const hiddenContentClassName = 'cm-md-hidden-format-chars';
 
 class FormattingCharacterWidget extends WidgetType {
 	public constructor() {
@@ -12,7 +14,8 @@ class FormattingCharacterWidget extends WidgetType {
 	}
 
 	public toDOM() {
-		const container = document.createElement("span");
+		const container = document.createElement('span');
+		container.classList.add(hiddenContentClassName);
 		return container;
 	}
 
@@ -45,6 +48,16 @@ const shouldFullReplace = (node: SyntaxNodeRef, view: EditorView) => {
 };
 
 export const replaceFormatCharacters = [
+	EditorView.theme({
+		[`& .${hiddenContentClassName}`]: {
+			// If the container lacks content, clicking to select content
+			// after the decoration selects content before the decoration
+			// in some cases.
+			// As a workaround, the decoration is given a small size:
+			display: 'inline-block',
+			width: '1px',
+		},
+	}),
 	makeConcealExtension({
 		createWidget: (node, view) => {
 			if (shouldFullReplace(node, view)) {
