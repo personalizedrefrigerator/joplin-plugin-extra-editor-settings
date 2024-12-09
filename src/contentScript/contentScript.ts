@@ -1,11 +1,13 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
-import { PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
+import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
 import { codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers, showPanel } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
 import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
+import replaceCheckboxes from "./replace/replaceCheckboxes";
+import replaceFormatCharacters from "./replace/replaceFormatCharacters";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -66,6 +68,11 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 							},
 						})
 					) : [],
+
+					settings.hideMarkdown === HideMarkdownMode.Some ? [
+						replaceCheckboxes,
+						replaceFormatCharacters,
+					] : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

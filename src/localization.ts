@@ -18,6 +18,11 @@ interface AppLocalization {
 	setting__textDirection__leftToRight: string;
 	setting__textDirection__rightToLeft: string;
 
+	setting__hideMarkdown: string;
+	setting__hideMarkdown__description: string;
+	setting__hideMarkdown__none: string;
+	setting__hideMarkdown__some: string;
+
 	setting__editorMaximumWidth: string;
 	setting__editorMaximumWidth__description: string;
 	setting__editorMaximumWidth__none: string;
@@ -67,6 +72,11 @@ const defaultStrings: AppLocalization = {
 
 	setting__showVisualSyncIndicator__textual: 'With text',
 	setting__showVisualSyncIndicator__icon: 'With an icon',
+
+	setting__hideMarkdown: 'Hide Markdown',
+	setting__hideMarkdown__description: 'Hides/replaces certain Markdown characters when the cursor is on a different line.',
+	setting__hideMarkdown__none: 'None',
+	setting__hideMarkdown__some: 'Some',
 
 	sync_status__not_syncing: 'Not syncing',
 	sync_status__syncing: 'Syncing...',

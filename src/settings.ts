@@ -1,6 +1,6 @@
 import joplin from "api";
 import { SettingItem, SettingItemType, SettingStorage } from "api/types";
-import { PluginSettings, SyncIndicatorMode, TextDirection } from "./types";
+import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "./types";
 import localization from "./localization";
 import { isMobile } from "./utils/isMobile";
 
@@ -105,6 +105,19 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 				[SyncIndicatorMode.NotShown]: localization.no,
 				[SyncIndicatorMode.Text]: localization.setting__showVisualSyncIndicator__textual,
 				[SyncIndicatorMode.Icon]: localization.setting__showVisualSyncIndicator__icon,
+			},
+		},
+		hideMarkdown: {
+			...defaultSettingOptions,
+			type: SettingItemType.String,
+
+			value: HideMarkdownMode.None,
+			label: localization.setting__hideMarkdown,
+			description: localization.setting__hideMarkdown__description,
+			isEnum: true,
+			options: {
+				[HideMarkdownMode.None]: localization.setting__hideMarkdown__none,
+				[HideMarkdownMode.Some]: localization.setting__hideMarkdown__some,
 			},
 		},
 		textDirection: {

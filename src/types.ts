@@ -11,10 +11,17 @@ export enum SyncIndicatorMode {
 	Icon = 'icon',	
 }
 
+export enum HideMarkdownMode {
+	None = 'none',	
+	Some = 'some',	
+}
+
 export interface PluginSettings {
 	lineNumbers: boolean;
 	codeFolding: boolean;
 	enableAutocomplete: boolean;
+
+	hideMarkdown: HideMarkdownMode;
 
 	highlightActiveLine: boolean;
 	highlightActiveLineGutter: boolean;
