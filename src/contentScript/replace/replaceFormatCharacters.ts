@@ -55,7 +55,7 @@ export const replaceFormatCharacters = [
 			// in some cases.
 			// As a workaround, the decoration is given a small size:
 			display: 'inline-block',
-			width: '1px',
+			width: '0.1px',
 		},
 	}),
 	makeConcealExtension({
@@ -63,6 +63,26 @@ export const replaceFormatCharacters = [
 			if (shouldFullReplace(node, view)) {
 				return new FormattingCharacterWidget();
 			}
+			return null;
+		},
+		getDecorationRange: (node, view) => {
+			// Headers in the form "## Header" should have the "##"s and the
+			// space immediately after hidden 
+			if (node.name === 'HeaderMark') {
+				const markerLine = view.state.doc.lineAt(node.from);
+
+				// Certain header styles DON'T have a space after the header mark:
+				const hasRoomForSpace = node.to + 1 >= markerLine.to;
+				if (hasRoomForSpace) {
+					return null;
+				}
+
+				// Include the space in the hidden region, if it's available
+				if (view.state.doc.sliceString(node.to, node.to + 1) === ' ') {
+					return [ node.from, node.to + 1 ];
+				}
+			}
+
 			return null;
 		},
 	}),
