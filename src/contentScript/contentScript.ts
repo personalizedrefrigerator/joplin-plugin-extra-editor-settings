@@ -1,6 +1,6 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
 import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
-import { codeFolding, foldGutter } from '@codemirror/language';
+import { bracketMatching, codeFolding, foldGutter } from '@codemirror/language';
 import { Compartment } from "@codemirror/state";
 import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers, showPanel } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
@@ -41,6 +41,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.highlightSpaces ? highlightWhitespace() : [],
 					settings.highlightTrailingSpaces ? highlightTrailingWhitespace() : [],
 					settings.highlightSelectionMatches ? highlightSelectionMatches() : [],
+					settings.bracketMatching ? bracketMatching() : [],
 
 					settings.gridPattern ? [
 						EditorView.theme({

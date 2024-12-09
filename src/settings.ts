@@ -62,6 +62,11 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			value: false,
 			label: localization.setting__highlightSelectionMatches,
 		},
+		bracketMatching: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__bracketMatching,
+		},
 		editorMaximumWidth: {
 			...defaultSettingOptions,
 			public: onMobile,

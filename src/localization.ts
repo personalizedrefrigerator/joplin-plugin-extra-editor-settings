@@ -10,6 +10,7 @@ interface AppLocalization {
 	setting__highlightSpaces: string;
 	setting__highlightTrailingSpaces: string;
 	setting__highlightSelectionMatches: string;
+	setting__bracketMatching: string;
 	setting__showGridPattern: string;
 	setting__showWordCount: string;
 	setting__textDirection: string;
@@ -54,6 +55,7 @@ const defaultStrings: AppLocalization = {
 	setting__highlightSpaces: 'Highlight spaces',
 	setting__highlightTrailingSpaces: 'Highlight trailing spaces',
 	setting__highlightSelectionMatches: 'Highlight selection matches',
+	setting__bracketMatching: 'Highlight matching brackets',
 
 	setting__showGridPattern: 'Show background grid pattern',
 	setting__showWordCount: 'Show word count',

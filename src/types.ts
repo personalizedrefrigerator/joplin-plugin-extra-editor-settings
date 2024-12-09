@@ -28,6 +28,7 @@ export interface PluginSettings {
 	highlightSpaces: boolean;
 	highlightTrailingSpaces: boolean;
 	highlightSelectionMatches: boolean;
+	bracketMatching: boolean;
 	editorMaximumWidth: string;
 	gridPattern: boolean;
 	wordCount: boolean;
