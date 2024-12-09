@@ -1,4 +1,4 @@
-import { WidgetType } from "@codemirror/view";
+import { EditorView, WidgetType } from "@codemirror/view";
 import makeConcealExtension from "./makeReplaceExtension";
 import { SyntaxNodeRef } from '@lezer/common';
 
@@ -19,14 +19,25 @@ class FormattingCharacterWidget extends WidgetType {
 	public ignoreEvent() {
 		return true;
 	}
+
+	public get estimatedHeight(): number {
+		return 0;
+	}
 }
 
-const shouldFullReplace = (node: SyntaxNodeRef) => {
-	if (['HeaderMark', 'CodeMark', 'QuoteMark'].includes(node.name)) {
+const shouldFullReplace = (node: SyntaxNodeRef, view: EditorView) => {
+	const getParentName = () => node.node.parent?.name;
+	const getNodeStartLine = () => view.state.doc.lineAt(node.from);
+
+	if (['HeaderMark', 'CodeMark', 'EmphasisMark'].includes(node.name)) {
 		return true;
 	}
 	
-	if ((node.name === 'URL' || node.name === 'LinkMark') && node.node.parent?.name === 'Link') {
+	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
+		return true;
+	}
+
+	if (node.name === 'QuoteMark' && node.from === getNodeStartLine().from) {
 		return true;
 	}
 
@@ -35,8 +46,8 @@ const shouldFullReplace = (node: SyntaxNodeRef) => {
 
 export const replaceFormatCharacters = [
 	makeConcealExtension({
-		createWidget: (node, _view) => {
-			if (shouldFullReplace(node)) {
+		createWidget: (node, view) => {
+			if (shouldFullReplace(node, view)) {
 				return new FormattingCharacterWidget();
 			}
 			return null;

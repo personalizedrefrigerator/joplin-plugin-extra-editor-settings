@@ -28,28 +28,29 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 	private updateDecorations(view: EditorView) {
 		const doc = view.state.doc;
 		const cursorLine = doc.lineAt(view.state.selection.main.anchor);
+		const mainSelection = view.state.selection.main;
+
+		const nodeIntersectsSelection = (node: SyntaxNodeRef) => {
+			const nodeContains = (point: number) => {
+				return point >= node.from && point <= node.to;
+			};
+			const selectionContains = (point: number) => {
+				return point >= mainSelection.from && point <= mainSelection.to;
+			};
+			return nodeContains(mainSelection.from) || nodeContains(mainSelection.to)
+				|| selectionContains(node.from) || selectionContains(node.to);
+		};
 
 		let widgets: Range<Decoration>[] = [];
 		for (let { from, to } of view.visibleRanges) {
 			syntaxTree(view.state).iterate({
 				from, to,
 				enter: node => {
-					console.log(node.name)
-					const nodeContains = (point: number) => {
-						return point >= node.from && point <= node.to;
-					};
-					const mainSelection = view.state.selection.main;
-					const selectionContains = (point: number) => {
-						return point >= mainSelection.from && point <= mainSelection.to;
-					};
-					const rangeContainsSelection = nodeContains(mainSelection.from) || nodeContains(mainSelection.to)
-						|| selectionContains(node.from) || selectionContains(node.to);
-
 					const nodeLineFrom = doc.lineAt(node.from);
 					const nodeLineTo = doc.lineAt(node.from);
-					const lineContainsSelection = cursorLine.number === nodeLineFrom.number || cursorLine.number === nodeLineTo.number;
+					const nodeLineContainsSelection = cursorLine.number === nodeLineFrom.number || cursorLine.number === nodeLineTo.number;
 	
-					if (!rangeContainsSelection && !lineContainsSelection) {
+					if (!nodeIntersectsSelection(node) && !nodeLineContainsSelection) {
 						const widget = extensionSpec.createWidget(node, view);
 						if (widget) {
 							const decoration = Decoration.replace({
