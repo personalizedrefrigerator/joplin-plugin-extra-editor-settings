@@ -8,7 +8,13 @@ import { Range } from "@codemirror/state";
 import { SyntaxNodeRef } from '@lezer/common';
 
 interface ReplacementExtension {
+	/** Should return the widget that replaces `node`. Returning `null` preserves `node` without replacement. */
 	createWidget(node: SyntaxNodeRef, view: EditorView): WidgetType|null;
+	/**
+	 * Returns a range ([from, to]) to which the decoration should be applied. Returning `null`
+	 * replaces the entire widget with the decoration.
+	 */
+	getDecorationRange?(node: SyntaxNodeRef, view: EditorView): [number, number]|null;
 }
 
 
@@ -28,8 +34,16 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 			syntaxTree(view.state).iterate({
 				from, to,
 				enter: node => {
-					const mainSelectionIndex = view.state.selection.main.head;
-					const rangeContainsSelection = mainSelectionIndex >= node.from && mainSelectionIndex <= node.to;
+					console.log(node.name)
+					const nodeContains = (point: number) => {
+						return point >= node.from && point <= node.to;
+					};
+					const mainSelection = view.state.selection.main;
+					const selectionContains = (point: number) => {
+						return point >= mainSelection.from && point <= mainSelection.to;
+					};
+					const rangeContainsSelection = nodeContains(mainSelection.from) || nodeContains(mainSelection.to)
+						|| selectionContains(node.from) || selectionContains(node.to);
 
 					const nodeLineFrom = doc.lineAt(node.from);
 					const nodeLineTo = doc.lineAt(node.from);
@@ -41,14 +55,15 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 							const decoration = Decoration.replace({
 								widget,
 							});
-		
-							widgets.push(decoration.range(node.from, node.to));
+
+							const range = extensionSpec.getDecorationRange?.(node, view) ?? [ node.from, node.to ];
+							widgets.push(decoration.range(range[0], range[1]));
 						}
 					}
 				},
 			});
 		}
-		this.decorations = Decoration.set(widgets);
+		this.decorations = Decoration.set(widgets, true);
 	};
 
 	public update(update: ViewUpdate) {

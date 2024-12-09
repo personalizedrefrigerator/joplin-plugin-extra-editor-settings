@@ -46,10 +46,18 @@ const toggleCheckbox = (view: EditorView, pos: number) => {
 };
 
 export const replaceCheckboxes = [
+	EditorView.theme({
+		[`& .${checkboxClassName} > input`]: {
+			width: '1.1em',
+			height: '1.1em',
+			margin: '4px',
+			verticalAlign: 'middle',
+		},
+	}),
 	EditorView.domEventHandlers({
 		mousedown: (evt, view) => {
 			let target = evt.target as Element;
-			if (target.nodeName === 'INPUT' && target.parentElement.classList.contains(checkboxClassName)) {
+			if (target.nodeName === 'INPUT' && target.parentElement?.classList?.contains(checkboxClassName)) {
 				return toggleCheckbox(view, view.posAtDOM(target));
 			}
 		}
@@ -61,6 +69,20 @@ export const replaceCheckboxes = [
 				const isChecked = content.toLowerCase().indexOf('x') !== -1;
 				return new CheckboxWidget(isChecked);
 			}
+			return null;
+		},
+		getDecorationRange: (node) => {
+			if (node.name === 'TaskMarker') {
+				const container = node.node.parent?.parent;
+				const listMarker = container?.getChild('ListMark');
+				if (!listMarker) {
+					return null;
+				}
+
+				return [ listMarker.from, node.to ];
+			}
+
+			return null;
 		},
 	}),
 ];

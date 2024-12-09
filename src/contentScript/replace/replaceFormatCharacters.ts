@@ -21,8 +21,8 @@ class FormattingCharacterWidget extends WidgetType {
 	}
 }
 
-const shouldReplace = (node: SyntaxNodeRef) => {
-	if (['HeaderMark', 'CodeMark'].includes(node.name)) {
+const shouldFullReplace = (node: SyntaxNodeRef) => {
+	if (['HeaderMark', 'CodeMark', 'QuoteMark'].includes(node.name)) {
 		return true;
 	}
 	
@@ -31,14 +31,15 @@ const shouldReplace = (node: SyntaxNodeRef) => {
 	}
 
 	return false;
-}
+};
 
 export const replaceFormatCharacters = [
 	makeConcealExtension({
 		createWidget: (node, _view) => {
-			if (shouldReplace(node)) {
+			if (shouldFullReplace(node)) {
 				return new FormattingCharacterWidget();
 			}
+			return null;
 		},
 	}),
 ];

@@ -6,6 +6,7 @@
 		"jsx": "react",
 		"allowJs": true,
 		"baseUrl": ".",
-		"noImplicitAny": true
+		"noImplicitAny": true,
+		"strictNullChecks": true
 	}
 }
