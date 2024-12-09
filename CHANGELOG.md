@@ -1,3 +1,9 @@
+# v1.6.0
+
+- Features:
+	- Added a "Hide Markdown" setting.
+	- Added a "Highlight matching brackets" setting.
+
 # v1.5.0
 
 - Features:
