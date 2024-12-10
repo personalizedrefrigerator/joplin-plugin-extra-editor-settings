@@ -1,3 +1,8 @@
+# v1.6.1
+
+- Bug fixes:
+	- Fix header alignment in Markdown replacement mode. (#5)
+
 # v1.6.0
 
 - Features:
