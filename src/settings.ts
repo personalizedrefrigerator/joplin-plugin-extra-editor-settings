@@ -123,6 +123,7 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			options: {
 				[HideMarkdownMode.None]: localization.setting__hideMarkdown__none,
 				[HideMarkdownMode.Some]: localization.setting__hideMarkdown__some,
+				[HideMarkdownMode.More]: localization.setting__hideMarkdown__more,
 			},
 		},
 		textDirection: {

@@ -1,5 +1,5 @@
 import { EditorView, WidgetType } from '@codemirror/view';
-import makeReplaceExtension from './makeReplaceExtension';
+import makeReplaceExtension from './util/makeInlineReplaceExtension';
 
 const checkboxClassName = 'cm-checkbox-toggle';
 
@@ -63,9 +63,9 @@ export const replaceCheckboxes = [
 		}
 	}),
 	makeReplaceExtension({
-		createWidget: (node, view) => {
+		createWidget: (node, state) => {
 			if (node.name === 'TaskMarker') {
-				const content = view.state.doc.sliceString(node.from, node.to);
+				const content = state.sliceDoc(node.from, node.to);
 				const isChecked = content.toLowerCase().indexOf('x') !== -1;
 				return new CheckboxWidget(isChecked);
 			}

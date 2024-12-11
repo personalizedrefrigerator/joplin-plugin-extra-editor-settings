@@ -8,6 +8,7 @@ import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
 import replaceCheckboxes from "./replace/replaceCheckboxes";
 import replaceFormatCharacters from "./replace/replaceFormatCharacters";
+import renderedMarkupReplacement from "./replace/renderedMarkupReplacement";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -18,6 +19,15 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 			]);
 
 			const editor: EditorView = editorControl.editor;
+
+			const hideSomeExtension = [
+				replaceCheckboxes,
+				replaceFormatCharacters,
+			];
+			const hideMoreExtension = [
+				...hideSomeExtension,
+				renderedMarkupReplacement(context.postMessage),
+			];
 
 			const updateSettings = (settings: PluginSettings) => {
 				const textDirection = settings.textDirection ?? TextDirection.Auto;
@@ -70,10 +80,8 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						})
 					) : [],
 
-					settings.hideMarkdown === HideMarkdownMode.Some ? [
-						replaceCheckboxes,
-						replaceFormatCharacters,
-					] : [],
+					settings.hideMarkdown === HideMarkdownMode.Some ? hideSomeExtension : [],
+					settings.hideMarkdown === HideMarkdownMode.More ? hideMoreExtension : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

@@ -1,6 +1,7 @@
 import { EditorView, WidgetType } from '@codemirror/view';
-import makeConcealExtension from './makeReplaceExtension';
+import makeInlineReplaceExtension from './util/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
+import { EditorState } from '@codemirror/state';
 
 const hiddenContentClassName = 'cm-md-hidden-format-chars';
 
@@ -28,9 +29,9 @@ class FormattingCharacterWidget extends WidgetType {
 	}
 }
 
-const shouldFullReplace = (node: SyntaxNodeRef, view: EditorView) => {
+const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getParentName = () => node.node.parent?.name;
-	const getNodeStartLine = () => view.state.doc.lineAt(node.from);
+	const getNodeStartLine = () => state.doc.lineAt(node.from);
 
 	if (['HeaderMark', 'CodeMark', 'EmphasisMark'].includes(node.name)) {
 		return true;
@@ -58,18 +59,18 @@ export const replaceFormatCharacters = [
 			width: '0.1px',
 		},
 	}),
-	makeConcealExtension({
-		createWidget: (node, view) => {
-			if (shouldFullReplace(node, view)) {
+	makeInlineReplaceExtension({
+		createWidget: (node, state) => {
+			if (shouldFullReplace(node, state)) {
 				return new FormattingCharacterWidget();
 			}
 			return null;
 		},
-		getDecorationRange: (node, view) => {
+		getDecorationRange: (node, state) => {
 			// Headers in the form "## Header" should have the "##"s and the
 			// space immediately after hidden 
 			if (node.name === 'HeaderMark') {
-				const markerLine = view.state.doc.lineAt(node.from);
+				const markerLine = state.doc.lineAt(node.from);
 
 				// Certain header styles DON'T have a space after the header mark:
 				const hasRoomForSpace = node.to + 1 >= markerLine.to;
@@ -78,7 +79,7 @@ export const replaceFormatCharacters = [
 				}
 
 				// Include the space in the hidden region, if it's available
-				if (view.state.doc.sliceString(node.to, node.to + 1) === ' ') {
+				if (state.doc.sliceString(node.to, node.to + 1) === ' ') {
 					return [ node.from, node.to + 1 ];
 				}
 			}
