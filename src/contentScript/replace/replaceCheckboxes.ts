@@ -3,6 +3,28 @@ import makeReplaceExtension from './makeReplaceExtension';
 
 const checkboxClassName = 'cm-checkbox-toggle';
 
+const toggleCheckbox = (view: EditorView, linePos: number) => {
+	if (linePos >= view.state.doc.length) {
+		// Position out of range
+		return false;
+	}
+
+	const line = view.state.doc.lineAt(linePos);
+	const checkboxMarkup = line.text.match(/\[(x|\s)\]/);
+	if (!checkboxMarkup) {
+		// Couldn't find the checkbox
+		return false;
+	}
+
+	const isChecked = checkboxMarkup[0] === '[x]';
+	const checkboxPos = checkboxMarkup.index! + line.from;
+
+	view.dispatch({
+		changes: [{ from: checkboxPos, to: checkboxPos + 3, insert: isChecked ? '[ ]' : '[x]' }],
+	});
+	return true;
+};
+
 class CheckboxWidget extends WidgetType {
 	public constructor(private checked: boolean) {
 		super();
@@ -12,7 +34,7 @@ class CheckboxWidget extends WidgetType {
 		return other.checked == this.checked;
 	}
 
-	public toDOM() {
+	public toDOM(view: EditorView) {
 		const container = document.createElement('span');
 		container.setAttribute('aria-hidden', 'true');
 		container.classList.add(checkboxClassName);
@@ -22,28 +44,26 @@ class CheckboxWidget extends WidgetType {
 		checkbox.checked = this.checked;
 		container.appendChild(checkbox);
 
+		checkbox.oninput = () => {
+			toggleCheckbox(view, view.posAtDOM(container));
+		};
+
 		return container;
+	}
+
+	public updateDOM(dom: HTMLElement): boolean {
+		const input = dom.querySelector('input');
+		if (input) {
+			input.checked = this.checked;
+			return true;
+		}
+		return false;
 	}
 
 	public ignoreEvent() {
 		return false;
 	}
 }
-
-const toggleCheckbox = (view: EditorView, pos: number) => {
-	let before = view.state.doc.sliceString(Math.max(0, pos - 3), pos);
-	let change;
-
-	if (before.toLowerCase() == '[x]') {
-		change = { from: pos - 3, to: pos, insert: '[ ]' };
-	}
-	else {
-		change = { from: pos - 3, to: pos, insert: '[x]' };
-	}
-
-	view.dispatch({ changes: change });
-	return true;
-};
 
 export const replaceCheckboxes = [
 	EditorView.theme({
@@ -55,10 +75,11 @@ export const replaceCheckboxes = [
 		},
 	}),
 	EditorView.domEventHandlers({
-		mousedown: (evt, view) => {
+		mousedown: (evt) => {
 			let target = evt.target as Element;
 			if (target.nodeName === 'INPUT' && target.parentElement?.classList?.contains(checkboxClassName)) {
-				return toggleCheckbox(view, view.posAtDOM(target));
+				// Let the checkbox handle the event
+				return true;
 			}
 		}
 	}),
