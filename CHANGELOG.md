@@ -1,3 +1,8 @@
+# v1.7.1
+
+- Changes:
+	- Make bulleted list replacement more consistent cross-platform in hidden Markdown mode.
+
 # v1.7.0
 
 - Features:
