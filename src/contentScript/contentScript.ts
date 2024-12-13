@@ -8,6 +8,7 @@ import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
 import replaceCheckboxes from "./replace/replaceCheckboxes";
 import replaceFormatCharacters from "./replace/replaceFormatCharacters";
+import replaceBulletLists from "./replace/replaceBulletLists";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -78,6 +79,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 
 					settings.hideMarkdown === HideMarkdownMode.Some ? [
 						replaceCheckboxes,
+						replaceBulletLists,
 						replaceFormatCharacters,
 					] : [],
 

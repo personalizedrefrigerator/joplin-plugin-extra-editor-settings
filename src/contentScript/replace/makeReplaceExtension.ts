@@ -9,7 +9,7 @@ import { SyntaxNodeRef } from '@lezer/common';
 
 interface ReplacementExtension {
 	/** Should return the widget that replaces `node`. Returning `null` preserves `node` without replacement. */
-	createWidget(node: SyntaxNodeRef, view: EditorView): WidgetType|null;
+	createWidget(node: SyntaxNodeRef, view: EditorView, parentTags: Readonly<Map<string, number>>): WidgetType|null;
 	/**
 	 * Returns a range ([from, to]) to which the decoration should be applied. Returning `null`
 	 * replaces the entire widget with the decoration.
@@ -41,26 +41,40 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 				|| selectionContains(node.from) || selectionContains(node.to);
 		};
 
+		const parentTagCounts = new Map<string, number>();
 		let widgets: Range<Decoration>[] = [];
+
 		for (let { from, to } of view.visibleRanges) {
+			parentTagCounts.clear();
 			syntaxTree(view.state).iterate({
 				from, to,
 				enter: node => {
+					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) + 1);
+
 					const nodeLineFrom = doc.lineAt(node.from);
 					const nodeLineTo = doc.lineAt(node.from);
 					const nodeLineContainsSelection = cursorLine.number === nodeLineFrom.number || cursorLine.number === nodeLineTo.number;
 	
 					if (!nodeIntersectsSelection(node) && !nodeLineContainsSelection) {
-						const widget = extensionSpec.createWidget(node, view);
+						const widget = extensionSpec.createWidget(node, view, parentTagCounts);
 						if (widget) {
 							const decoration = Decoration.replace({
 								widget,
 							});
 
 							const range = extensionSpec.getDecorationRange?.(node, view) ?? [ node.from, node.to ];
-							widgets.push(decoration.range(range[0], range[1]));
+							const rangeLineFrom = doc.lineAt(range[0]);
+							const rangeLineTo = doc.lineAt(range[1]);
+
+							// A different start/end line casues errors.
+							if (rangeLineFrom.number === rangeLineTo.number) {
+								widgets.push(decoration.range(range[0], range[1]));
+							}
 						}
 					}
+				},
+				leave: node => {
+					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) - 1);
 				},
 			});
 		}
