@@ -4,31 +4,38 @@ import makeReplaceExtension from './makeReplaceExtension';
 const listMarkerClassName = 'cm-bullet-list-marker';
 
 class BulletListMarker extends WidgetType {
-	private bulletMark: string;
+	private className: string;
 	public constructor(depth: number) {
 		super();
 		if (depth % 3 === 0) {
-			this.bulletMark = '▪'
+			this.className = '-depth-0'
 		} else if (depth % 3 === 1) {
-			this.bulletMark = '•';
+			this.className = '-depth-1';
 		} else {
-			this.bulletMark = '◦';
+			this.className = '-depth-2';
 		}
 	}
 
 	public eq(other: BulletListMarker) {
-		return other.bulletMark === this.bulletMark;
+		return other.className === this.className;
 	}
 
 	public toDOM() {
 		const container = document.createElement('span');
-		container.classList.add(listMarkerClassName);
-		container.textContent = this.bulletMark;
+		container.classList.add(listMarkerClassName, this.className);
+		container.setAttribute('aria-label', 'bullet');
+		container.role = 'img';
+
+		const content = document.createElement('span');
+		content.classList.add('content');
+		container.appendChild(content);
+
 		return container;
 	}
 
 	public updateDOM(other: HTMLElement) {
-		other.textContent = this.bulletMark;
+		other.classList.remove('-depth-0', '-depth-1', '-depth-2');
+		other.classList.add(this.className);
 		return true;
 	}
 }
@@ -37,8 +44,27 @@ export const replaceBulletLists = [
 	EditorView.theme({
 		[`& .${listMarkerClassName}`]: {
 			'pointer-events': 'none',
-			'padding-left': '4px',
-			'padding-right': '2px',
+
+			'padding-inline-start': '4px',
+			'padding-inline-end': '2px',
+
+			'&.-depth-0 > .content': {
+				'border-radius': 0,
+			},
+			'&.-depth-2 > .content': {
+				'border': '1px solid currentcolor',
+				'background-color': 'transparent',
+			},
+		},
+		[`& .${listMarkerClassName} > .content`]: {
+			'display': 'inline-block',
+			'--size': '5px',
+			'width': 'var(--size)',
+			'height': 'var(--size)',
+			'box-sizing': 'border-box',
+			'vertical-align': 'middle',
+			'border-radius': 'var(--size)',
+			'background-color': 'currentcolor',
 		},
 	}),
 	makeReplaceExtension({
