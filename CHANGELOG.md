@@ -1,3 +1,11 @@
+# v1.7.0
+
+- Features:
+	- [Keyboard shortcuts](https://codemirror.net/docs/ref/#language.foldKeymap) to expand/collapse folded items.
+	- Render bulleted list markers in hidden Markdown mode (#6).
+- Bug fixes:
+	- Fix toggling checkboxes in hidden Markdown mode after focusing them with <kbd>tab</kbd> and the keyboard.
+
 # v1.6.1
 
 - Bug fixes:
