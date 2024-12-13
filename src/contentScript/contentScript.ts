@@ -1,8 +1,8 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
 import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
-import { bracketMatching, codeFolding, foldGutter } from '@codemirror/language';
-import { Compartment } from "@codemirror/state";
-import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers, showPanel } from "@codemirror/view";
+import { bracketMatching, codeFolding, foldGutter, foldKeymap } from '@codemirror/language';
+import { Compartment, Prec } from "@codemirror/state";
+import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, keymap, lineNumbers, showPanel } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
 import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
@@ -23,7 +23,13 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 				const textDirection = settings.textDirection ?? TextDirection.Auto;
 				const extensions = [
 					settings.lineNumbers ? [ lineNumbers(), highlightActiveLineGutter(), gutter({}) ] : [],
-					settings.codeFolding ? [ codeFolding(), foldGutter(), gutter({}) ] : [],
+					settings.codeFolding ? [
+						codeFolding(),
+						foldGutter(),
+						gutter({}),
+						// Set to [low] to allow Joplin's built-in shortcuts to override
+						Prec.low(keymap.of(foldKeymap)),
+					] : [],
 					editorControl.joplinExtensions.enableLanguageDataAutocomplete.of(settings.enableAutocomplete),
 					settings.highlightActiveLine ? [
 						highlightActiveLine(),
