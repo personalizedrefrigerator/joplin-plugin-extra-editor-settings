@@ -36,12 +36,9 @@ class BulletListMarker extends WidgetType {
 export const replaceBulletLists = [
 	EditorView.theme({
 		[`& .${listMarkerClassName}`]: {
-			display: 'inline-block',
 			'pointer-events': 'none',
-			// Make the bullet slightly larger
-			'transform': 'scale(1.1)',
-			'margin-left': '4px',
-			'margin-right': '2px',
+			'padding-left': '4px',
+			'padding-right': '2px',
 		},
 	}),
 	makeReplaceExtension({
