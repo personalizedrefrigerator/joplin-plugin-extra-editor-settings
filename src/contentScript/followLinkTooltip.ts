@@ -2,6 +2,7 @@ import { syntaxTree } from "@codemirror/language";
 import { EditorState, StateField } from "@codemirror/state";
 import { EditorView, showTooltip, Tooltip } from "@codemirror/view";
 import { SyntaxNode, Tree } from '@lezer/common';
+import localization from "../localization";
 
 const getUrlNodeAt = (pos: number, tree: Tree) => {
 	let iterator = tree.resolveStack(pos);
@@ -42,6 +43,7 @@ const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 
 				const link = document.createElement('button');
 				link.textContent = `🔗 ${url}`;
+				link.title = localization.link__followUrl(url),
 				link.onclick = () => {
 					onOpenLink(url);
 				};
@@ -76,7 +78,11 @@ const followLinkTooltip = (onOpenLink: OnOpenLink) => {
 				backgroundColor: 'transparent',
 				border: 'transparent',
 				fontSize: 'inherit',
+	
 				whiteSpace: 'pre',
+				maxWidth: '95vw',
+				textOverflow: 'ellipsis',
+				overflowX: 'hidden',
 
 				textDecoration: 'underline',
 				cursor: 'pointer',
