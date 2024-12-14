@@ -41,7 +41,7 @@ const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 				dom.classList.add('cm-md-link-tooltip');
 
 				const link = document.createElement('button');
-				link.textContent = url;
+				link.textContent = `🔗 ${url}`;
 				link.onclick = () => {
 					onOpenLink(url);
 				};
@@ -75,6 +75,9 @@ const followLinkTooltip = (onOpenLink: OnOpenLink) => {
 			'& .cm-md-link-tooltip > button': {
 				backgroundColor: 'transparent',
 				border: 'transparent',
+				fontSize: 'inherit',
+				whiteSpace: 'pre',
+
 				textDecoration: 'underline',
 				cursor: 'pointer',
 				color: 'var(--joplin-url-color)',
