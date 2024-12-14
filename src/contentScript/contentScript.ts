@@ -9,6 +9,7 @@ import syncIndicatorPanel from "./syncIndicatorPanel";
 import replaceCheckboxes from "./replace/replaceCheckboxes";
 import replaceFormatCharacters from "./replace/replaceFormatCharacters";
 import replaceBulletLists from "./replace/replaceBulletLists";
+import followLinkTooltip from "./followLinkTooltip";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -17,6 +18,8 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 			editorControl.addExtension([
 				extensionCompartment.of([]),
 			]);
+
+			const onOpenUrl = (url: string) => context.postMessage({ type: 'openUrl', url });
 
 			const editor: EditorView = editorControl.editor;
 
@@ -82,6 +85,8 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						replaceBulletLists,
 						replaceFormatCharacters,
 					] : [],
+
+					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

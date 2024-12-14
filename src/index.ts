@@ -53,8 +53,16 @@ joplin.plugins.register({
 
 		const contentScriptId = 'cm6-extended-settings';
 		await joplin.contentScripts.register(ContentScriptType.CodeMirrorPlugin, contentScriptId, './contentScript/contentScript.js');
-		await joplin.contentScripts.onMessage(contentScriptId, (message: string) => {
-			if (message === 'getSettings') {
+		await joplin.contentScripts.onMessage(contentScriptId, (message: string|object) => {
+			if (typeof message === 'object') {
+				if ('type' in message && message.type === 'openUrl') {
+					if (!('url' in message) || typeof message.url !== 'string') {
+						throw new Error('Message is missing URL property or URL is not a string.');
+					}
+
+					return joplin.commands.execute('openItem', message.url);
+				}
+			} else if (message === 'getSettings') {
 				contentScriptRegistered = true;
 				return lastSettings;
 			} else if (message === 'getSyncStatus') {

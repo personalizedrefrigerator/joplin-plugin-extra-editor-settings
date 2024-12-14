@@ -13,6 +13,8 @@ interface AppLocalization {
 	setting__bracketMatching: string;
 	setting__showGridPattern: string;
 	setting__showWordCount: string;
+	setting__showLinkTooltip: string;
+	setting__showLinkTooltip__description: string;
 	setting__textDirection: string;
 	setting__textDirection__description: string;
 	setting__textDirection__auto: string;
@@ -58,6 +60,8 @@ const defaultStrings: AppLocalization = {
 	setting__bracketMatching: 'Highlight matching brackets',
 
 	setting__showGridPattern: 'Show background grid pattern',
+	setting__showLinkTooltip: 'Show link tooltip',
+	setting__showLinkTooltip__description: 'Shows tooltips that allow opening links under the cursor',
 	setting__showWordCount: 'Show word count',
 	setting__showVisualSyncIndicator: 'Show visual sync indicator',
 	setting__showVisualSyncIndicator__description: 'Shows the sync status in the Markdown editor.',
