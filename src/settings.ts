@@ -126,6 +126,12 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 				[HideMarkdownMode.More]: localization.setting__hideMarkdown__more,
 			},
 		},
+		showLinkTooltip: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__showLinkTooltip,
+			description: localization.setting__showLinkTooltip__description,
+		},
 		textDirection: {
 			...defaultSettingOptions,
 			type: SettingItemType.String,

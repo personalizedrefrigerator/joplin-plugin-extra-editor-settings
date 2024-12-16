@@ -1,5 +1,5 @@
 import { EditorView, WidgetType } from '@codemirror/view';
-import makeInlineReplaceExtension from './util/makeInlineReplaceExtension';
+import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 
@@ -48,7 +48,7 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	return false;
 };
 
-export const replaceFormatCharacters = [
+const replaceFormatCharacters = [
 	EditorView.theme({
 		[`& .${hiddenContentClassName}`]: {
 			// If the container lacks content, clicking to select content

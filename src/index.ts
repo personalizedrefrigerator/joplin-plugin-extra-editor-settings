@@ -63,6 +63,12 @@ joplin.plugins.register({
 					const markdown = 1;
 					const rendered = await joplin.commands.execute('renderMarkup', markdown, message.markup);
 					return rendered;
+				} else if (message.type === 'openUrl') {
+					if (!('url' in message) || typeof message.url !== 'string') {
+						throw new Error('Message is missing URL property or URL is not a string.');
+					}
+
+					return joplin.commands.execute('openItem', message.url);
 				}
 			} else if (message === 'getSettings') {
 				contentScriptRegistered = true;

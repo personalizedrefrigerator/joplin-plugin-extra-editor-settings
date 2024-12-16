@@ -5,7 +5,7 @@ import type { SyntaxNodeRef } from '@lezer/common';
 
 export interface ReplacementExtension {
 	/** Should return the widget that replaces `node`. Returning `null` preserves `node` without replacement. */
-	createWidget(node: SyntaxNodeRef, state: EditorState): WidgetType|null;
+	createWidget(node: SyntaxNodeRef, state: EditorState, parentTags: Readonly<Map<string, number>>): WidgetType|null;
 	/**
 	 * Returns a range ([from, to]) to which the decoration should be applied. Returning `null`
 	 * replaces the entire widget with the decoration.

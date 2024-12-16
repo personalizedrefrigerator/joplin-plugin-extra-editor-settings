@@ -23,6 +23,7 @@ export interface PluginSettings {
 	enableAutocomplete: boolean;
 
 	hideMarkdown: HideMarkdownMode;
+	showLinkTooltip: boolean;
 
 	highlightActiveLine: boolean;
 	highlightActiveLineGutter: boolean;

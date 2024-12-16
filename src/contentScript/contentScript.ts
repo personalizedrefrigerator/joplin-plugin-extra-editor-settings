@@ -1,14 +1,17 @@
 import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/types";
 import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
-import { bracketMatching, codeFolding, foldGutter } from '@codemirror/language';
-import { Compartment } from "@codemirror/state";
-import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, lineNumbers, showPanel } from "@codemirror/view";
+import { bracketMatching, codeFolding, foldGutter, foldKeymap } from '@codemirror/language';
+import { Compartment, Prec } from "@codemirror/state";
+import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, keymap, lineNumbers, showPanel } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
 import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
 import replaceCheckboxes from "./replace/replaceCheckboxes";
 import replaceFormatCharacters from "./replace/replaceFormatCharacters";
 import renderedMarkupReplacement from "./replace/renderedMarkupReplacement";
+import replaceBulletLists from "./replace/replaceBulletLists";
+import followLinkTooltip from "./followLinkTooltip";
+import replaceDividers from "./replace/replaceDividers";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -18,11 +21,15 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 				extensionCompartment.of([]),
 			]);
 
+			const onOpenUrl = (url: string) => context.postMessage({ type: 'openUrl', url });
+
 			const editor: EditorView = editorControl.editor;
 
 			const hideSomeExtension = [
 				replaceCheckboxes,
+				replaceBulletLists,
 				replaceFormatCharacters,
+				replaceDividers,
 			];
 			const hideMoreExtension = [
 				...hideSomeExtension,
@@ -33,7 +40,13 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 				const textDirection = settings.textDirection ?? TextDirection.Auto;
 				const extensions = [
 					settings.lineNumbers ? [ lineNumbers(), highlightActiveLineGutter(), gutter({}) ] : [],
-					settings.codeFolding ? [ codeFolding(), foldGutter(), gutter({}) ] : [],
+					settings.codeFolding ? [
+						codeFolding(),
+						foldGutter(),
+						gutter({}),
+						// Set to [low] to allow Joplin's built-in shortcuts to override
+						Prec.low(keymap.of(foldKeymap)),
+					] : [],
 					editorControl.joplinExtensions.enableLanguageDataAutocomplete.of(settings.enableAutocomplete),
 					settings.highlightActiveLine ? [
 						highlightActiveLine(),
@@ -82,6 +95,8 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 
 					settings.hideMarkdown === HideMarkdownMode.Some ? hideSomeExtension : [],
 					settings.hideMarkdown === HideMarkdownMode.More ? hideMoreExtension : [],
+
+					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({
