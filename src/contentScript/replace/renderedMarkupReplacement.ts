@@ -33,6 +33,15 @@ const extractRenderedContent = (html: string, isMath: boolean) => {
 
 	// Math: Extract MathML
 	if (isMath) {
+		const math = dom.querySelector('math');
+
+		// Remove all <annotation>s -- KaTeX can store the original TeX as an <annotation>, which
+		// is made visible by DOMPurify.
+		let annotation;
+		while (annotation = math?.querySelector('annotation')) {
+			annotation.remove();
+		}
+
 		return dom.querySelector('math')?.outerHTML ?? html;
 	} else {
 		const allParagraphs = dom.querySelectorAll('p');
@@ -146,13 +155,19 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 				// Try to prevent it from overflowing the editor
 				'min-width': 0,
 			},
+			[`& .cm-line.${renderedMdClassName} table`]: {
+				'& td': {
+					border: '1px solid var(--joplin-color)',
+					margin: 0,
+				}
+			},
 			[`& .${renderedMdClassName} img`]: {
 				// Too-large images can cause scrolling issues
 				'max-width': '100%',
 				'max-height': '50vh',
 			},
 			'& math': {
-				// For now, rather than attempting to load the Katex math fonts (or bundle
+				// For now, rather than attempting to load the KaTeX math fonts (or bundle
 				// custom fonts), try to use math fonts that are probably pre-installed:
 				'font-family': '"Noto Sans Math", "Cambria Math", "STIX Two Math"',
 			},
