@@ -1,8 +1,8 @@
 import { EditorView, WidgetType } from '@codemirror/view';
-import makeInlineReplaceExtension from './util/makeInlineReplaceExtension';
+import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import * as DOMPurify from 'dompurify';
 import { PostMessageHandler } from '../../../api/types';
-import { makeBlockReplaceExtension } from './util/makeBlockReplaceExtension';
+import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 
 interface CancelEvent {
 	cancelled: boolean;

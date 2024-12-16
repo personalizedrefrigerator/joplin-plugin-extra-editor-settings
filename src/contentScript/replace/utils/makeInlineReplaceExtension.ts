@@ -20,40 +20,41 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	private updateDecorations(view: EditorView) {
 		const doc = view.state.doc;
 		const cursorLine = doc.lineAt(view.state.selection.main.anchor);
+		const selection = view.state.selection;
 
+		const parentTagCounts = new Map<string, number>();
 		let widgets: Range<Decoration>[] = [];
 		for (let { from, to } of view.visibleRanges) {
+			parentTagCounts.clear();
 			syntaxTree(view.state).iterate({
 				from, to,
 				enter: node => {
+					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) + 1);
+
 					const nodeLineFrom = doc.lineAt(node.from);
-					const nodeLineTo = doc.lineAt(node.to);
+					const nodeLineTo = doc.lineAt(node.from);
 					const nodeLineContainsSelection = cursorLine.number === nodeLineFrom.number || cursorLine.number === nodeLineTo.number;
 	
-					if (!nodeIntersectsSelection(view.state.selection, node) && !nodeLineContainsSelection) {
-						const widget = extensionSpec.createWidget(node, view.state);
+					if (!nodeIntersectsSelection(selection, node) && !nodeLineContainsSelection) {
+						const widget = extensionSpec.createWidget(node, view.state, parentTagCounts);
 						if (widget) {
 							const decoration = Decoration.replace({
 								widget,
 							});
 
-							let range = extensionSpec.getDecorationRange?.(node, view.state) ?? [ node.from, node.to ];
+							const range = extensionSpec.getDecorationRange?.(node, view.state) ?? [ node.from, node.to ];
 							const rangeLineFrom = doc.lineAt(range[0]);
 							const rangeLineTo = doc.lineAt(range[1]);
 
-							// Inline decoration rendering fails if more than a single line is
-							// replaced. Fall back to replacing just the first line:
-							if (rangeLineFrom.number !== rangeLineTo.number) {
-								range = [range[0], rangeLineFrom.to];
-							}
-
-							if (range[0] <= range[1]) {
+							// A different start/end line casues errors.
+							if (rangeLineFrom.number === rangeLineTo.number) {
 								widgets.push(decoration.range(range[0], range[1]));
-							} else {
-								console.warn('Invalid range:', range[0], 'to', range[1]);
 							}
 						}
 					}
+				},
+				leave: node => {
+					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) - 1);
 				},
 			});
 		}
