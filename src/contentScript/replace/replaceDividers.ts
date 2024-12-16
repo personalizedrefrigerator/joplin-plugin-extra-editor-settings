@@ -21,10 +21,6 @@ class DividerWidget extends WidgetType {
 	public ignoreEvent() {
 		return true;
 	}
-
-	public get estimatedHeight(): number {
-		return 0;
-	}
 }
 
 const replaceDividers = [
