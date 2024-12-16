@@ -13,8 +13,9 @@ class DividerWidget extends WidgetType {
 	}
 
 	public toDOM() {
-		const container = document.createElement('hr');
+		const container = document.createElement('div');
 		container.classList.add(dividerClassName, 'cm-line');
+		container.appendChild(document.createElement('hr'));
 		return container;
 	}
 
@@ -25,7 +26,7 @@ class DividerWidget extends WidgetType {
 
 const replaceDividers = [
 	EditorView.theme({
-		[`& .${dividerClassName}`]: {
+		[`& .${dividerClassName} > hr`]: {
 			border: 'none',
 			borderBottom: '2px solid var(--joplin-divider-color)',
 		},
