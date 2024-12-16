@@ -6,19 +6,11 @@ import { ViewPlugin, ViewUpdate } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
 import { Range } from "@codemirror/state";
 import { SyntaxNodeRef } from '@lezer/common';
-
-interface ReplacementExtension {
-	/** Should return the widget that replaces `node`. Returning `null` preserves `node` without replacement. */
-	createWidget(node: SyntaxNodeRef, view: EditorView, parentTags: Readonly<Map<string, number>>): WidgetType|null;
-	/**
-	 * Returns a range ([from, to]) to which the decoration should be applied. Returning `null`
-	 * replaces the entire widget with the decoration.
-	 */
-	getDecorationRange?(node: SyntaxNodeRef, view: EditorView): [number, number]|null;
-}
+import { ReplacementExtension } from "../types";
+import nodeIntersectsSelection from "./nodeIntersectsSelection";
 
 
-export const makeConcealExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
+export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
 
 	public constructor(view: EditorView) {
@@ -28,22 +20,10 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 	private updateDecorations(view: EditorView) {
 		const doc = view.state.doc;
 		const cursorLine = doc.lineAt(view.state.selection.main.anchor);
-		const mainSelection = view.state.selection.main;
-
-		const nodeIntersectsSelection = (node: SyntaxNodeRef) => {
-			const nodeContains = (point: number) => {
-				return point >= node.from && point <= node.to;
-			};
-			const selectionContains = (point: number) => {
-				return point >= mainSelection.from && point <= mainSelection.to;
-			};
-			return nodeContains(mainSelection.from) || nodeContains(mainSelection.to)
-				|| selectionContains(node.from) || selectionContains(node.to);
-		};
+		const selection = view.state.selection;
 
 		const parentTagCounts = new Map<string, number>();
 		let widgets: Range<Decoration>[] = [];
-
 		for (let { from, to } of view.visibleRanges) {
 			parentTagCounts.clear();
 			syntaxTree(view.state).iterate({
@@ -55,14 +35,14 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 					const nodeLineTo = doc.lineAt(node.from);
 					const nodeLineContainsSelection = cursorLine.number === nodeLineFrom.number || cursorLine.number === nodeLineTo.number;
 	
-					if (!nodeIntersectsSelection(node) && !nodeLineContainsSelection) {
-						const widget = extensionSpec.createWidget(node, view, parentTagCounts);
+					if (!nodeIntersectsSelection(selection, node) && !nodeLineContainsSelection) {
+						const widget = extensionSpec.createWidget(node, view.state, parentTagCounts);
 						if (widget) {
 							const decoration = Decoration.replace({
 								widget,
 							});
 
-							const range = extensionSpec.getDecorationRange?.(node, view) ?? [ node.from, node.to ];
+							const range = extensionSpec.getDecorationRange?.(node, view.state) ?? [ node.from, node.to ];
 							const rangeLineFrom = doc.lineAt(range[0]);
 							const rangeLineTo = doc.lineAt(range[1]);
 
@@ -90,4 +70,4 @@ export const makeConcealExtension = (extensionSpec: ReplacementExtension) => Vie
 	decorations: view => view.decorations,
 });
 
-export default makeConcealExtension;
+export default makeInlineReplaceExtension;

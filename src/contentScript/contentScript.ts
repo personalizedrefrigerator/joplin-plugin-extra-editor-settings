@@ -10,6 +10,7 @@ import replaceCheckboxes from "./replace/replaceCheckboxes";
 import replaceFormatCharacters from "./replace/replaceFormatCharacters";
 import replaceBulletLists from "./replace/replaceBulletLists";
 import followLinkTooltip from "./followLinkTooltip";
+import replaceDividers from "./replace/replaceDividers";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -84,6 +85,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						replaceCheckboxes,
 						replaceBulletLists,
 						replaceFormatCharacters,
+						replaceDividers,
 					] : [],
 
 					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
