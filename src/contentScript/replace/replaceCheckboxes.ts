@@ -85,11 +85,17 @@ const replaceCheckboxes = [
 				width: '1.1em',
 				height: '1.1em',
 				margin: '4px',
+				marginInlineStart: 0,
 				verticalAlign: 'middle',
 			},
-			'&:not(.-depth-1) > input': {
-				marginInlineStart: 0,
-			}
+			'&:before': {
+				content: '"- ["',
+				color: 'transparent',
+			},
+			'&:after': {
+				content: '"]"',
+				color: 'transparent',
+			},
 		},
 	}),
 	EditorView.domEventHandlers({
