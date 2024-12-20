@@ -1,3 +1,13 @@
+# v1.8.0
+
+- Changes in hidden Markdown mode:
+	- **Checklists**: Align the dash in the focused item with the checkbox in other items.
+	- **Links**: Underline links.
+	- **Strikethrough**: Render strikethrough on nonfocused lines.
+	- **Dividers**: Render dividers on other lines.
+- Other changes:
+	- Added a tooltip for some link types under the cursor.
+
 # v1.7.1
 
 - Changes:

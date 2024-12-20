@@ -1,6 +1,6 @@
 {
   "name": "joplin-plugin-codemirror-6-settings",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "scripts": {
     "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
     "prepare": "npm run dist",
