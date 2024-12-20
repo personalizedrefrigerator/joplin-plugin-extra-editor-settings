@@ -1,5 +1,5 @@
 import { EditorView, WidgetType } from '@codemirror/view';
-import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
+import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 
 const dividerClassName = 'cm-md-divider';
 
@@ -14,7 +14,7 @@ class DividerWidget extends WidgetType {
 
 	public toDOM() {
 		const container = document.createElement('hr');
-		container.classList.add(dividerClassName, 'cm-line');
+		container.classList.add(dividerClassName);
 		return container;
 	}
 
@@ -26,11 +26,13 @@ class DividerWidget extends WidgetType {
 const replaceDividers = [
 	EditorView.theme({
 		[`& .${dividerClassName}`]: {
+			display: 'inline-block',
+			width: '100%',
 			border: 'none',
 			borderBottom: '2px solid var(--joplin-divider-color)',
 		},
 	}),
-	makeBlockReplaceExtension({
+	makeInlineReplaceExtension({
 		createWidget: (node) => {
 			if (node.name === 'HorizontalRule') {
 				return new DividerWidget();
