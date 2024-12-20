@@ -11,6 +11,8 @@ import replaceFormatCharacters from "./replace/replaceFormatCharacters";
 import replaceBulletLists from "./replace/replaceBulletLists";
 import followLinkTooltip from "./followLinkTooltip";
 import replaceDividers from "./replace/replaceDividers";
+import addFormattingClasses from "./replace/addFormattingClasses";
+import replacementExtension from "./replace/replacementExtension";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -81,12 +83,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						})
 					) : [],
 
-					settings.hideMarkdown === HideMarkdownMode.Some ? [
-						replaceCheckboxes,
-						replaceBulletLists,
-						replaceFormatCharacters,
-						replaceDividers,
-					] : [],
+					settings.hideMarkdown === HideMarkdownMode.Some ? replacementExtension : [],
 
 					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
 

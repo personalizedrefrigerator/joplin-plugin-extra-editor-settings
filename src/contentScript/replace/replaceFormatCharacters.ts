@@ -33,7 +33,7 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getParentName = () => node.node.parent?.name;
 	const getNodeStartLine = () => state.doc.lineAt(node.from);
 
-	if (['HeaderMark', 'CodeMark', 'EmphasisMark'].includes(node.name)) {
+	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark'].includes(node.name)) {
 		return true;
 	}
 	
@@ -60,7 +60,7 @@ const replaceFormatCharacters = [
 		},
 	}),
 	makeInlineReplaceExtension({
-		createWidget: (node, state) => {
+		createDecoration: (node, state) => {
 			if (shouldFullReplace(node, state)) {
 				return new FormattingCharacterWidget();
 			}

@@ -84,7 +84,7 @@ const replaceCheckboxes = [
 		}
 	}),
 	makeReplaceExtension({
-		createWidget: (node, state) => {
+		createDecoration: (node, state) => {
 			if (node.name === 'TaskMarker') {
 				const content = state.doc.sliceString(node.from, node.to);
 				const isChecked = content.toLowerCase().indexOf('x') !== -1;

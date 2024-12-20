@@ -68,7 +68,7 @@ const replaceBulletLists = [
 		},
 	}),
 	makeReplaceExtension({
-		createWidget: (node, _view, parentTagCounts) => {
+		createDecoration: (node, _view, parentTagCounts) => {
 			if (node.name === 'ListMark') {
 				const parent = node.node.parent;
 				if (parent?.name === 'ListItem' && parent?.parent?.name === 'BulletList') {

@@ -33,7 +33,7 @@ const replaceDividers = [
 		},
 	}),
 	makeInlineReplaceExtension({
-		createWidget: (node) => {
+		createDecoration: (node) => {
 			if (node.name === 'HorizontalRule') {
 				return new DividerWidget();
 			}
