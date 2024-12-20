@@ -26,18 +26,28 @@ const toggleCheckbox = (view: EditorView, linePos: number) => {
 };
 
 class CheckboxWidget extends WidgetType {
-	public constructor(private checked: boolean) {
+	public constructor(private checked: boolean, private depth: number) {
 		super();
 	}
 
 	public eq(other: CheckboxWidget) {
-		return other.checked == this.checked;
+		return other.checked == this.checked && other.depth === this.depth;
+	}
+
+	private applyContainerClasses(container: HTMLElement) {
+		container.classList.add(checkboxClassName);
+
+		for (const className of [...container.classList]) {
+			if (className.startsWith('-depth-')) {
+				container.classList.remove(className);
+			}
+		}
+
+		container.classList.add(`-depth-${this.depth}`);
 	}
 
 	public toDOM(view: EditorView) {
 		const container = document.createElement('span');
-		container.setAttribute('aria-hidden', 'true');
-		container.classList.add(checkboxClassName);
 
 		const checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
@@ -48,10 +58,13 @@ class CheckboxWidget extends WidgetType {
 			toggleCheckbox(view, view.posAtDOM(container));
 		};
 
+		this.applyContainerClasses(container);
 		return container;
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
+		this.applyContainerClasses(dom);
+
 		const input = dom.querySelector('input');
 		if (input) {
 			input.checked = this.checked;
@@ -67,11 +80,16 @@ class CheckboxWidget extends WidgetType {
 
 const replaceCheckboxes = [
 	EditorView.theme({
-		[`& .${checkboxClassName} > input`]: {
-			width: '1.1em',
-			height: '1.1em',
-			margin: '4px',
-			verticalAlign: 'middle',
+		[`& .${checkboxClassName}`]: {
+			'& > input': {
+				width: '1.1em',
+				height: '1.1em',
+				margin: '4px',
+				verticalAlign: 'middle',
+			},
+			'&:not(.-depth-1) > input': {
+				marginInlineStart: 0,
+			}
 		},
 	}),
 	EditorView.domEventHandlers({
@@ -84,11 +102,11 @@ const replaceCheckboxes = [
 		}
 	}),
 	makeReplaceExtension({
-		createDecoration: (node, state) => {
+		createDecoration: (node, state, parentTags) => {
 			if (node.name === 'TaskMarker') {
 				const content = state.doc.sliceString(node.from, node.to);
 				const isChecked = content.toLowerCase().indexOf('x') !== -1;
-				return new CheckboxWidget(isChecked);
+				return new CheckboxWidget(isChecked, parentTags.get('ListItem') ?? 0);
 			}
 			return null;
 		},
