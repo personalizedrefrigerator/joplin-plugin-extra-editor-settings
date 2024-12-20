@@ -8,7 +8,7 @@ const strikethroughMarkDecoration = Decoration.mark({ class: strikethroughClassN
 
 const addFormattingClasses = [
 	EditorView.theme({
-		[`& .${linkClassName}, & .${linkClassName} > span`]: {
+		[`& .${linkClassName}, & .${linkClassName} span`]: {
 			textDecoration: 'underline',
 		},
 		[`& .${strikethroughClassName}`]: {
