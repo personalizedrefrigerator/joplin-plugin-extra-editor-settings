@@ -37,11 +37,15 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			if (decoration) {
 				const range = extensionSpec.getDecorationRange?.(node, view.state) ?? [ node.from, node.to ];
 				const rangeLineFrom = doc.lineAt(range[0]);
-				const rangeLineTo = doc.lineAt(range[1]);
+				const rangeLineTo = range.length === 2 ? doc.lineAt(range[1]) : rangeLineFrom;
 
 				// A different start/end line casues errors.
 				if (rangeLineFrom.number === rangeLineTo.number) {
-					widgets.push(decoration.range(range[0], range[1]));
+					if (range.length === 1) {
+						widgets.push(decoration.range(range[0]));
+					} else {
+						widgets.push(decoration.range(range[0], range[1]));
+					}
 				}
 			}
 		};

@@ -9,6 +9,7 @@ export interface ReplacementExtension {
 	/**
 	 * Returns a range ([from, to]) to which the decoration should be applied. Returning `null`
 	 * replaces the entire widget with the decoration.
+	 * Only a single number should be returned to create a point/full line range.
 	 */
-	getDecorationRange?(node: SyntaxNodeRef, state: EditorState): [number, number]|null;
+	getDecorationRange?(node: SyntaxNodeRef, state: EditorState): [number]|[number, number]|null;
 }
