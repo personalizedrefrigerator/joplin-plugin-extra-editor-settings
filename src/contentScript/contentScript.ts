@@ -12,6 +12,7 @@ import renderedMarkupReplacement from "./replace/renderedMarkupReplacement";
 import replaceBulletLists from "./replace/replaceBulletLists";
 import followLinkTooltip from "./followLinkTooltip";
 import replaceDividers from "./replace/replaceDividers";
+import replacementExtension from "./replace/replacementExtension";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -93,8 +94,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						})
 					) : [],
 
-					settings.hideMarkdown === HideMarkdownMode.Some ? hideSomeExtension : [],
-					settings.hideMarkdown === HideMarkdownMode.More ? hideMoreExtension : [],
+					settings.hideMarkdown !== HideMarkdownMode.None ? replacementExtension(settings.hideMarkdown) : [],
 
 					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
 

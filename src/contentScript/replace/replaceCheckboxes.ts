@@ -1,7 +1,8 @@
-import { EditorView, WidgetType } from '@codemirror/view';
+import { Decoration, EditorView, WidgetType } from '@codemirror/view';
+import { SyntaxNodeRef } from '@lezer/common';
 import makeReplaceExtension from './utils/makeInlineReplaceExtension';
 
-const checkboxClassName = 'cm-checkbox-toggle';
+const checkboxClassName = 'cm-ext-checkbox-toggle';
 
 const toggleCheckbox = (view: EditorView, linePos: number) => {
 	if (linePos >= view.state.doc.length) {
@@ -26,18 +27,28 @@ const toggleCheckbox = (view: EditorView, linePos: number) => {
 };
 
 class CheckboxWidget extends WidgetType {
-	public constructor(private checked: boolean) {
+	public constructor(private checked: boolean, private depth: number) {
 		super();
 	}
 
 	public eq(other: CheckboxWidget) {
-		return other.checked == this.checked;
+		return other.checked == this.checked && other.depth === this.depth;
+	}
+
+	private applyContainerClasses(container: HTMLElement) {
+		container.classList.add(checkboxClassName);
+
+		for (const className of [...container.classList]) {
+			if (className.startsWith('-depth-')) {
+				container.classList.remove(className);
+			}
+		}
+
+		container.classList.add(`-depth-${this.depth}`);
 	}
 
 	public toDOM(view: EditorView) {
 		const container = document.createElement('span');
-		container.setAttribute('aria-hidden', 'true');
-		container.classList.add(checkboxClassName);
 
 		const checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
@@ -48,10 +59,13 @@ class CheckboxWidget extends WidgetType {
 			toggleCheckbox(view, view.posAtDOM(container));
 		};
 
+		this.applyContainerClasses(container);
 		return container;
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
+		this.applyContainerClasses(dom);
+
 		const input = dom.querySelector('input');
 		if (input) {
 			input.checked = this.checked;
@@ -65,14 +79,25 @@ class CheckboxWidget extends WidgetType {
 	}
 }
 
+const completedTaskClassName = 'cm-ext-completed-item';
+const completedListItemDecoration = Decoration.line({ class: completedTaskClassName, isFullLine: true });
+
 const replaceCheckboxes = [
 	EditorView.theme({
-		[`& .${checkboxClassName} > input`]: {
-			width: '1.1em',
-			height: '1.1em',
-			margin: '4px',
-			verticalAlign: 'middle',
+		[`& .${checkboxClassName}`]: {
+			'& > input': {
+				width: '1.1em',
+				height: '1.1em',
+				margin: '4px',
+				verticalAlign: 'middle',
+			},
+			'&:not(.-depth-1) > input': {
+				marginInlineStart: 0,
+			},
 		},
+		[`& .${completedTaskClassName}`]: {
+			opacity: 0.69,
+		}
 	}),
 	EditorView.domEventHandlers({
 		mousedown: (evt) => {
@@ -84,15 +109,23 @@ const replaceCheckboxes = [
 		}
 	}),
 	makeReplaceExtension({
-		createWidget: (node, state) => {
+		createDecoration: (node, state, parentTags) => {
+			const markerIsChecked = (marker: SyntaxNodeRef) => {
+				const content = state.doc.sliceString(marker.from, marker.to);
+				return content.toLowerCase().indexOf('x') !== -1;
+			};
+
 			if (node.name === 'TaskMarker') {
-				const content = state.sliceDoc(node.from, node.to);
-				const isChecked = content.toLowerCase().indexOf('x') !== -1;
-				return new CheckboxWidget(isChecked);
+				return new CheckboxWidget(markerIsChecked(node), parentTags.get('ListItem') ?? 0);
+			} else if (node.name === 'Task') {
+				const marker = node.node.getChild('TaskMarker');
+				if (marker && markerIsChecked(marker)) {
+					return completedListItemDecoration;
+				}
 			}
 			return null;
 		},
-		getDecorationRange: (node) => {
+		getDecorationRange: (node, state) => {
 			if (node.name === 'TaskMarker') {
 				const container = node.node.parent?.parent;
 				const listMarker = container?.getChild('ListMark');
@@ -101,6 +134,9 @@ const replaceCheckboxes = [
 				}
 
 				return [ listMarker.from, node.to ];
+			} else if (node.name === 'Task') {
+				const taskLine = state.doc.lineAt(node.from);
+				return [taskLine.from];
 			}
 
 			return null;
