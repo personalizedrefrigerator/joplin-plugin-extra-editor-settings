@@ -94,7 +94,7 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 						})
 					) : [],
 
-					settings.hideMarkdown !== HideMarkdownMode.None ? replacementExtension(settings.hideMarkdown) : [],
+					settings.hideMarkdown !== HideMarkdownMode.None ? replacementExtension(settings.hideMarkdown, context.postMessage) : [],
 
 					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
 

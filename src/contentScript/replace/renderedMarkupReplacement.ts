@@ -153,7 +153,9 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			// Block rendered markup
 			[`& .cm-line.${renderedMdClassName}`]: {
 				// Try to prevent it from overflowing the editor
-				'min-width': 0,
+				minWidth: 0,
+				overflowX: 'auto',
+				paddingBottom: '4px',
 			},
 			[`& .cm-line.${renderedMdClassName} table`]: {
 				'& td': {
@@ -181,7 +183,7 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			},
 		}),
 		makeInlineReplaceExtension({
-			createWidget: (node, state) => {
+			createDecoration: (node, state) => {
 				if (node.name === 'InlineMath' || node.name === 'Image') {
 					const nodeText = state.sliceDoc(node.from, node.to);
 					return new RenderedMarkupWidget(nodeText, renderingContext, {
@@ -192,8 +194,8 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			},
 		}),
 		makeBlockReplaceExtension({
-			createWidget: (node, state) => {
-				if (node.name === 'BlockMath' || node.name === 'Table') {
+			createDecoration: (node, state) => {
+				if (node.name === 'BlockMath') {
 					const nodeText = state.sliceDoc(node.from, node.to);
 					return new RenderedMarkupWidget(nodeText, renderingContext, {
 						extractMath: node.name === 'BlockMath',
