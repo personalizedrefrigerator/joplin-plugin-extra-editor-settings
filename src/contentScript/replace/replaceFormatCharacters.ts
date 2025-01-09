@@ -38,8 +38,6 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 		return true;
 	}
 
-	console.log('node', node.name, state.sliceDoc(node.from, node.to));
-	
 	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
 		const parentContent = state.sliceDoc(node.node.parent!.from, node.node.parent!.to);
 		if (node.name === 'LinkMark') {

@@ -20,17 +20,14 @@ export const resolveReferenceById = (referenceId: string, state: EditorState) =>
 const referenceLinkExp = /^(\[[^\]]+\])\s*(\[[^\]]+\])?$/;
 
 export const isReferenceLink = (link: string) => {
-	console.log('isReferenceLink', link);
 	return !!link.trim().match(referenceLinkExp);
 }
 
 export const resolveReferenceFromLink = (link: string, state: EditorState) => {
-	console.log('lookup', link);
 	const referenceMatch = link.trim().match(referenceLinkExp);
 	if (!referenceMatch) return null;
 
 	const resolved = resolveReferenceById(referenceMatch[2] ?? referenceMatch[1], state);
-	console.log('resv', resolved);
 	return resolved;
 };
 
