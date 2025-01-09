@@ -2,6 +2,7 @@ import { EditorView, WidgetType } from '@codemirror/view';
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
+import referenceLinkStateField, { isReferenceLink, resolveReferenceById, resolveReferenceFromLink } from './utils/referenceLinksStateField';
 
 const hiddenContentClassName = 'cm-md-hidden-format-chars';
 
@@ -36,8 +37,16 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark'].includes(node.name)) {
 		return true;
 	}
+
+	console.log('node', node.name, state.sliceDoc(node.from, node.to));
 	
 	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
+		const parentContent = state.sliceDoc(node.node.parent!.from, node.node.parent!.to);
+		if (node.name === 'LinkMark') {
+			if (isReferenceLink(parentContent)) {
+				return !!resolveReferenceFromLink(parentContent, state);
+			}
+		}
 		return true;
 	}
 
@@ -49,6 +58,8 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 };
 
 const replaceFormatCharacters = [
+	referenceLinkStateField,
+
 	EditorView.theme({
 		[`& .${hiddenContentClassName}`]: {
 			// If the container lacks content, clicking to select content

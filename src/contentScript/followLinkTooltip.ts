@@ -1,27 +1,40 @@
 import { syntaxTree } from "@codemirror/language";
-import { EditorState, StateField } from "@codemirror/state";
+import { EditorState, StateField, Text } from "@codemirror/state";
 import { EditorView, showTooltip, Tooltip } from "@codemirror/view";
-import { SyntaxNode, Tree } from '@lezer/common';
+import { SyntaxNodeRef, Tree } from '@lezer/common';
 import localization from "../localization";
+import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from "./replace/utils/referenceLinksStateField";
 
-const getUrlNodeAt = (pos: number, tree: Tree) => {
+const getUrlAt = (pos: number, tree: Tree, state: EditorState) => {
+	const nodeText = (node: SyntaxNodeRef) => {
+		return state.doc.sliceString(node.from, node.to);
+	};
+
 	let iterator = tree.resolveStack(pos);
-	let urlNode: SyntaxNode|null = null;
+
 	while (true) {
 		if (iterator.node.name === 'Link') {
-			urlNode = iterator.node.getChild('URL');
+			const urlNode = iterator.node.getChild('URL');
+			if (urlNode) {
+				return nodeText(urlNode);
+			}
+			const fullLinkText = nodeText(iterator.node);
+			const referenceLink = resolveReferenceFromLink(fullLinkText, state);
+			if (referenceLink) {
+				return referenceLink;
+			}
 		} else if (iterator.node.name === 'URL') {
-			urlNode = iterator.node;
+			return nodeText(iterator.node);
 		}
 
-		if (!iterator.next || urlNode) {
+		if (!iterator.next) {
 			break;
 		} else {
 			iterator = iterator.next;
 		}
 	}
 
-	return urlNode;
+	return null;
 };
 
 type OnOpenLink = (url: string) => void;
@@ -30,9 +43,8 @@ const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 	const tree = syntaxTree(state);
 	return state.selection.ranges.map((range): Tooltip|null => {
 		if (!range.empty) return null;
-		const urlNode = getUrlNodeAt(range.anchor, tree);
-		if (!urlNode) return null;
-		const url = state.sliceDoc(urlNode.from, urlNode.to);
+		const url = getUrlAt(range.anchor, tree, state);
+		if (!url) return null;
 
 		return {
 			pos: range.head,
@@ -73,6 +85,7 @@ const followLinkTooltip = (onOpenLink: OnOpenLink) => {
 	});
 
 	return [
+		referenceLinkStateField,
 		EditorView.theme({
 			'& .cm-md-link-tooltip > button': {
 				backgroundColor: 'transparent',
