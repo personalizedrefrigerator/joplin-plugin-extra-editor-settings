@@ -38,6 +38,12 @@ const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 	}).filter(tooltip => !!tooltip) as Tooltip[];
 };
 
+/**
+ * Provides a tooltip that allows the user to either open external links, or
+ * jump to other parts of the document. If not an internal document link, `onOpenExternalLink`
+ * is called. The content provided to `onOpenExternalLink` is not guaranteed to be a valid
+ * link.
+ */
 const followLinkTooltip = (onOpenExternalLink: OnOpenLink) => {
 	const openLink = (link: string, view: EditorView) => {
 		const targetLine = findLineMatchingLink(link, view.state);
