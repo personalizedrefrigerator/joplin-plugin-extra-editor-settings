@@ -2,7 +2,7 @@ import { EditorView, WidgetType } from '@codemirror/view';
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
-import referenceLinkStateField, { isReferenceLink, resolveReferenceById, resolveReferenceFromLink } from './utils/referenceLinksStateField';
+import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/utils/referenceLinksStateField';
 
 const hiddenContentClassName = 'cm-md-hidden-format-chars';
 

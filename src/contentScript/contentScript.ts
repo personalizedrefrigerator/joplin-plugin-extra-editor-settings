@@ -6,12 +6,7 @@ import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, hig
 import { highlightSelectionMatches } from '@codemirror/search';
 import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
-import replaceCheckboxes from "./replace/replaceCheckboxes";
-import replaceFormatCharacters from "./replace/replaceFormatCharacters";
-import replaceBulletLists from "./replace/replaceBulletLists";
-import followLinkTooltip from "./followLinkTooltip";
-import replaceDividers from "./replace/replaceDividers";
-import addFormattingClasses from "./replace/addFormattingClasses";
+import followLinkTooltip from "./links/followLinkTooltip";
 import replacementExtension from "./replace/replacementExtension";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {

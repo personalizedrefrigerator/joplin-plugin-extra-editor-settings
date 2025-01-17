@@ -2,7 +2,7 @@
   "name": "joplin-plugin-codemirror-6-settings",
   "version": "1.8.0",
   "scripts": {
-    "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
+    "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && cp LICENSE dist/ && webpack --env joplin-plugin-config=createArchive",
     "prepare": "npm run dist",
     "updateVersion": "webpack --env joplin-plugin-config=updateVersion",
     "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force"
@@ -23,6 +23,7 @@
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.26.0",
     "@codemirror/search": "^6.5.6",
+    "@joplin/fork-uslug": "^1.0.22",
     "@types/node": "^18.7.13",
     "chalk": "^4.1.0",
     "copy-webpack-plugin": "^11.0.0",
