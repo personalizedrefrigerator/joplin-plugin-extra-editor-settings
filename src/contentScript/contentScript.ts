@@ -2,7 +2,7 @@ import { ContentScriptContext, MarkdownEditorContentScriptModule } from "api/typ
 import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "../types";
 import { bracketMatching, codeFolding, foldGutter, foldKeymap } from '@codemirror/language';
 import { Compartment, Prec } from "@codemirror/state";
-import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, keymap, lineNumbers, showPanel } from "@codemirror/view";
+import { EditorView, gutter, highlightActiveLine, highlightActiveLineGutter, highlightTrailingWhitespace, highlightWhitespace, keymap, lineNumbers } from "@codemirror/view";
 import { highlightSelectionMatches } from '@codemirror/search';
 import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";

@@ -1,4 +1,4 @@
-import { EditorState, Line, RangeSet, Range, RangeValue, StateField, Text, Transaction } from "@codemirror/state";
+import { EditorState, RangeSet, Range, RangeValue, StateField, Text } from "@codemirror/state";
 
 class ReferenceLinkValue extends RangeValue {
 	public constructor(public readonly key: string, public readonly value: string) {

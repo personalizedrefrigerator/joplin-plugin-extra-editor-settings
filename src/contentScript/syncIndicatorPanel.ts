@@ -1,7 +1,7 @@
 import { EditorView, Panel, showPanel, ViewUpdate } from "@codemirror/view";
 import { PostMessageHandler } from "../../api/types";
 import { SyncIndicatorMode, SyncStatus } from "../types";
-import { AnnotationType, EditorState, Extension } from "@codemirror/state";
+import { Extension } from "@codemirror/state";
 import localization from "../localization";
 import syncIcon from "./icons/syncIcon";
 import iconDataUrl from "./icons/iconDataUrl";
