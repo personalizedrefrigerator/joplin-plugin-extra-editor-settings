@@ -9,6 +9,7 @@ import getUrlAtPosition from "./utils/getUrlAtPosition";
 
 type OnOpenLink = (url: string, view: EditorView) => void;
 
+/** Returns tooltips for the links under the cursor(s). */
 const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 	const tree = syntaxTree(state);
 	return state.selection.ranges.map((range): Tooltip|null => {
