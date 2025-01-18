@@ -28,7 +28,7 @@ export const resolveReferenceFromLink = (link: string, state: EditorState) => {
 	if (!referenceMatch) return null;
 
 	const resolved = resolveReferenceById(referenceMatch[2] ?? referenceMatch[1], state);
-	return resolved;
+	return resolved?.trim() ?? null;
 };
 
 
