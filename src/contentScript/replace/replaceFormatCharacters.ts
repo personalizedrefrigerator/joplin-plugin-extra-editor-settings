@@ -1,34 +1,8 @@
-import { EditorView, WidgetType } from '@codemirror/view';
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/utils/referenceLinksStateField';
-
-const hiddenContentClassName = 'cm-md-hidden-format-chars';
-
-class FormattingCharacterWidget extends WidgetType {
-	public constructor() {
-		super();
-	}
-
-	public eq(_other: FormattingCharacterWidget) {
-		return true;
-	}
-
-	public toDOM() {
-		const container = document.createElement('span');
-		container.classList.add(hiddenContentClassName);
-		return container;
-	}
-
-	public ignoreEvent() {
-		return true;
-	}
-
-	public get estimatedHeight(): number {
-		return 0;
-	}
-}
+import { Decoration } from '@codemirror/view';
 
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getParentName = () => node.node.parent?.name;
@@ -55,23 +29,15 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	return false;
 };
 
+const hideDecoration = Decoration.replace({});
+
 const replaceFormatCharacters = [
 	referenceLinkStateField,
 
-	EditorView.theme({
-		[`& .${hiddenContentClassName}`]: {
-			// If the container lacks content, clicking to select content
-			// after the decoration selects content before the decoration
-			// in some cases.
-			// As a workaround, the decoration is given a small size:
-			display: 'inline-block',
-			width: '0.1px',
-		},
-	}),
 	makeInlineReplaceExtension({
 		createDecoration: (node, state) => {
 			if (shouldFullReplace(node, state)) {
-				return new FormattingCharacterWidget();
+				return hideDecoration;
 			}
 			return null;
 		},
