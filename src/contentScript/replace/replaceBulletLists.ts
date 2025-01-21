@@ -26,6 +26,11 @@ class BulletListMarker extends WidgetType {
 		container.setAttribute('aria-label', 'bullet');
 		container.role = 'img';
 
+		const sizingNode = document.createElement('span');
+		sizingNode.classList.add('sizing');
+		sizingNode.textContent = '-';
+		container.appendChild(sizingNode);
+
 		const content = document.createElement('span');
 		content.classList.add('content');
 		container.appendChild(content);
@@ -44,9 +49,7 @@ const replaceBulletLists = [
 	EditorView.theme({
 		[`& .${listMarkerClassName}`]: {
 			'pointer-events': 'none',
-
-			'padding-inline-start': '4px',
-			'padding-inline-end': '2px',
+			'position': 'relative',
 
 			'&.-depth-0 > .content': {
 				'border-radius': 0,
@@ -55,16 +58,25 @@ const replaceBulletLists = [
 				'border': '1px solid currentcolor',
 				'background-color': 'transparent',
 			},
-		},
-		[`& .${listMarkerClassName} > .content`]: {
-			'display': 'inline-block',
-			'--size': '5px',
-			'width': 'var(--size)',
-			'height': 'var(--size)',
-			'box-sizing': 'border-box',
-			'vertical-align': 'middle',
-			'border-radius': 'var(--size)',
-			'background-color': 'currentcolor',
+
+			'& > .sizing': {
+				'color': 'transparent',
+			},
+
+			'& > .content': {
+				'position': 'absolute',
+				'top': '0',
+				'left': '0',
+
+				'--size': '5px',
+				// Push the content to the center of the container
+				'margin-top': 'calc(100% + calc(var(--size) / 2))',
+				'width': 'var(--size)',
+				'height': 'var(--size)',
+				'box-sizing': 'border-box',
+				'border-radius': 'var(--size)',
+				'background-color': 'currentcolor',
+			},
 		},
 	}),
 	makeReplaceExtension({
