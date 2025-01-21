@@ -95,15 +95,29 @@ class RenderedMarkupWidget extends WidgetType {
 	public toDOM(view: EditorView) {
 		const container = document.createElement(this.options?.block ? 'div' : 'span');
 		container.classList.add(renderedMdClassName);
+
+		let content = container;
 		if (this.options?.block) {
 			container.classList.add('cm-line');
+
+			content = document.createElement('div');
+			content.classList.add('content');
+			container.appendChild(content);
+
+			// Move the cursor to the line when the container is clicked
+			container.onclick = () => {
+				const pos = view.posAtDOM(container);
+				view.dispatch({
+					selection: { anchor: Math.min(view.state.doc.length, pos + this.markup.length) },
+				});
+			};
 		}
 
 		if (this.sanitizedHtml) {
-			container.innerHTML = this.sanitizedHtml;
+			content.innerHTML = this.sanitizedHtml;
 		} else {
 			void this.render().then(() => {
-				container.innerHTML = this.sanitizedHtml;
+				content.innerHTML = this.sanitizedHtml;
 				view.requestMeasure();
 			});
 		}
@@ -152,10 +166,8 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			},
 			// Block rendered markup
 			[`& .cm-line.${renderedMdClassName}`]: {
-				// Try to prevent it from overflowing the editor
-				minWidth: 0,
-				overflowX: 'auto',
-				paddingBottom: '4px',
+				position: 'relative',
+				overflow: 'hidden',
 			},
 			[`& .cm-line.${renderedMdClassName} table`]: {
 				'& td': {
@@ -171,11 +183,11 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			'& math': {
 				// For now, rather than attempting to load the KaTeX math fonts (or bundle
 				// custom fonts), try to use math fonts that are probably pre-installed:
-				'font-family': '"Noto Sans Math", "Cambria Math", "STIX Two Math"',
+				'font-family': '"Noto Sans Math", "Cambria Math", "STIX Two Math", "STIX Math"',
 			},
 			'& .joplin-table-wrapper': {
-				'display': 'flex',
-				'overflow': 'auto',
+				display: 'flex',
+				overflow: 'auto',
 			},
 			[`& .${renderedMdClassName} .not-loaded-resource img`]: {
 				width: '26px',

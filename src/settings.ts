@@ -3,6 +3,7 @@ import { SettingItem, SettingItemType, SettingStorage } from "api/types";
 import { HideMarkdownMode, PluginSettings, SyncIndicatorMode, TextDirection } from "./types";
 import localization from "./localization";
 import { isMobile } from "./utils/isMobile";
+import isVersionGreater from "./utils/isVersionGreater";
 
 export const registerSettings = async (applySettings: (settings: PluginSettings)=>void) => {
 	const sectionName = 'codemirror6-extended-options';
@@ -12,6 +13,11 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 		iconName: 'fas fa-edit',
 	});
 	const onMobile = await isMobile();
+	const version = (await joplin.versionInfo()).version;
+	// Only some of the 3.2 pre-releases support the renderMarkup command.
+	// For now, assume any 3.2 release supports it, since renderMarkup was added in
+	// different versions on different platforms.
+	const supportsExtendedRender = isVersionGreater(version, '3.2.0');
 
 	const defaultSettingOptions = {
 		section: sectionName,
@@ -123,7 +129,9 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			options: {
 				[HideMarkdownMode.None]: localization.setting__hideMarkdown__none,
 				[HideMarkdownMode.Some]: localization.setting__hideMarkdown__some,
-				[HideMarkdownMode.More]: localization.setting__hideMarkdown__more,
+				...(supportsExtendedRender ? {
+					[HideMarkdownMode.More]: localization.setting__hideMarkdown__more,
+				} : {}),
 			},
 		},
 		showLinkTooltip: {
