@@ -92,7 +92,7 @@ const defaultStrings: AppLocalization = {
 	sync_status__syncing: 'Syncing...',
 	sync_status__synced_with_errors: 'Failed to sync',
 
-	link__followUrl(url) { return `Follow URL: ${url}`; },
+	link__followUrl(url) { return `Follow link: ${url}`; },
 
 	words: 'Words',
 	yes: 'Yes',

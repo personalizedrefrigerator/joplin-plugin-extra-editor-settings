@@ -7,6 +7,7 @@
 		"allowJs": true,
 		"baseUrl": ".",
 		"noImplicitAny": true,
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"noUnusedLocals": true,
 	}
 }

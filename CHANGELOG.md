@@ -1,3 +1,11 @@
+# v1.9.0
+
+- Hidden Markdown mode:
+	- **Dividers**: Fix dividers sometimes have an extra vertical margin (#19)
+- Link tooltip:
+	- Support linking to headers with `[link](#header)`-style links.
+	- Support jumping to footnotes.
+
 # v1.8.0
 
 - Changes in hidden Markdown mode:

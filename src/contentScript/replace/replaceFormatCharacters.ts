@@ -1,33 +1,8 @@
-import { EditorView, WidgetType } from '@codemirror/view';
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
-
-const hiddenContentClassName = 'cm-md-hidden-format-chars';
-
-class FormattingCharacterWidget extends WidgetType {
-	public constructor() {
-		super();
-	}
-
-	public eq(_other: FormattingCharacterWidget) {
-		return true;
-	}
-
-	public toDOM() {
-		const container = document.createElement('span');
-		container.classList.add(hiddenContentClassName);
-		return container;
-	}
-
-	public ignoreEvent() {
-		return true;
-	}
-
-	public get estimatedHeight(): number {
-		return 0;
-	}
-}
+import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/utils/referenceLinksStateField';
+import { Decoration } from '@codemirror/view';
 
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getParentName = () => node.node.parent?.name;
@@ -36,8 +11,27 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark'].includes(node.name)) {
 		return true;
 	}
-	
+
 	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
+		const parent = node.node.parent!;
+		const parentContent = state.sliceDoc(parent.from, parent.to);
+		if (node.name === 'LinkMark') {
+			if (isReferenceLink(parentContent)) {
+				return !!resolveReferenceFromLink(parentContent, state);
+			}
+		} else if (node.name === 'URL') {
+			// Find all closing link marks
+			const closingBracketNodes = parent.getChildren('LinkMark').filter(mark => {
+				const isClosingBracket = state.sliceDoc(mark.from, mark.to) === ']';
+				return isClosingBracket;
+			});
+
+			// URLs can only be hidden if after the last ].
+			const lastClosingBracketIdx = closingBracketNodes.length > 0 ? closingBracketNodes[closingBracketNodes.length - 1].from : null;
+			if (!lastClosingBracketIdx || node.from < lastClosingBracketIdx) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -48,21 +42,15 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	return false;
 };
 
+const hideDecoration = Decoration.replace({});
+
 const replaceFormatCharacters = [
-	EditorView.theme({
-		[`& .${hiddenContentClassName}`]: {
-			// If the container lacks content, clicking to select content
-			// after the decoration selects content before the decoration
-			// in some cases.
-			// As a workaround, the decoration is given a small size:
-			display: 'inline-block',
-			width: '0.1px',
-		},
-	}),
+	referenceLinkStateField,
+
 	makeInlineReplaceExtension({
 		createDecoration: (node, state) => {
 			if (shouldFullReplace(node, state)) {
-				return new FormattingCharacterWidget();
+				return hideDecoration;
 			}
 			return null;
 		},

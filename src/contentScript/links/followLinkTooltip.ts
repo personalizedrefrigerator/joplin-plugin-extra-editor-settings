@@ -1,51 +1,34 @@
 import { syntaxTree } from "@codemirror/language";
 import { EditorState, StateField } from "@codemirror/state";
 import { EditorView, showTooltip, Tooltip } from "@codemirror/view";
-import { SyntaxNode, Tree } from '@lezer/common';
-import localization from "../localization";
+import localization from "../../localization";
+import referenceLinkStateField from "./utils/referenceLinksStateField";
+import findLineMatchingLink from "./utils/findLineMatchingLink";
+import getUrlAtPosition from "./utils/getUrlAtPosition";
 
-const getUrlNodeAt = (pos: number, tree: Tree) => {
-	let iterator = tree.resolveStack(pos);
-	let urlNode: SyntaxNode|null = null;
-	while (true) {
-		if (iterator.node.name === 'Link') {
-			urlNode = iterator.node.getChild('URL');
-		} else if (iterator.node.name === 'URL') {
-			urlNode = iterator.node;
-		}
 
-		if (!iterator.next || urlNode) {
-			break;
-		} else {
-			iterator = iterator.next;
-		}
-	}
+type OnOpenLink = (url: string, view: EditorView) => void;
 
-	return urlNode;
-};
-
-type OnOpenLink = (url: string) => void;
-
+/** Returns tooltips for the links under the cursor(s). */
 const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 	const tree = syntaxTree(state);
 	return state.selection.ranges.map((range): Tooltip|null => {
 		if (!range.empty) return null;
-		const urlNode = getUrlNodeAt(range.anchor, tree);
-		if (!urlNode) return null;
-		const url = state.sliceDoc(urlNode.from, urlNode.to);
+		const url = getUrlAtPosition(range.anchor, tree, state);
+		if (!url) return null;
 
 		return {
 			pos: range.head,
 			arrow: true,
-			create: () => {
+			create: (view) => {
 				const dom = document.createElement('div');
 				dom.classList.add('cm-md-link-tooltip');
 
 				const link = document.createElement('button');
-				link.textContent = `🔗 ${url}`;
-				link.title = localization.link__followUrl(url),
+				link.textContent = `🔗 ${url.url}${url.label ? `: ${url.label}` : ''}`;
+				link.title = localization.link__followUrl(url.url),
 				link.onclick = () => {
-					onOpenLink(url);
+					onOpenLink(url.url, view);
 				};
 
 				dom.appendChild(link);
@@ -56,15 +39,37 @@ const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 	}).filter(tooltip => !!tooltip) as Tooltip[];
 };
 
-const followLinkTooltip = (onOpenLink: OnOpenLink) => {
+/**
+ * Provides a tooltip that allows the user to either open external links, or
+ * jump to other parts of the document. If not an internal document link, `onOpenExternalLink`
+ * is called. The content provided to `onOpenExternalLink` is not guaranteed to be a valid
+ * link.
+ */
+const followLinkTooltip = (onOpenExternalLink: OnOpenLink) => {
+	const openLink = (link: string, view: EditorView) => {
+		const targetLine = findLineMatchingLink(link, view.state);
+		if (targetLine) {
+			view.dispatch({
+				selection: { anchor: targetLine.to },
+				scrollIntoView: true,
+				effects: [
+					EditorView.announce.of(`Jumped to line ${targetLine.number}`),
+				],
+			});
+			view.focus();
+		} else {
+			onOpenExternalLink(link, view);
+		}
+	};
+
 	const followLinkTooltipField = StateField.define<readonly Tooltip[]>({
-		create: state => getLinkTooltips(onOpenLink, state),
+		create: state => getLinkTooltips(openLink, state),
 		update: (tooltips, transaction) => {
 			if (!transaction.docChanged && !transaction.selection) {
 				return tooltips;
 			}
 
-			return getLinkTooltips(onOpenLink, transaction.state);
+			return getLinkTooltips(openLink, transaction.state);
 		},
 		provide: field => {
 			const tooltipsFromState = (state: EditorState) => state.field(field);
@@ -73,6 +78,7 @@ const followLinkTooltip = (onOpenLink: OnOpenLink) => {
 	});
 
 	return [
+		referenceLinkStateField,
 		EditorView.theme({
 			'& .cm-md-link-tooltip > button': {
 				backgroundColor: 'transparent',
