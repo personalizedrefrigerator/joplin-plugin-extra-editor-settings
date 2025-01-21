@@ -13,10 +13,23 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	}
 
 	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
-		const parentContent = state.sliceDoc(node.node.parent!.from, node.node.parent!.to);
+		const parent = node.node.parent!;
+		const parentContent = state.sliceDoc(parent.from, parent.to);
 		if (node.name === 'LinkMark') {
 			if (isReferenceLink(parentContent)) {
 				return !!resolveReferenceFromLink(parentContent, state);
+			}
+		} else if (node.name === 'URL') {
+			// Find all closing link marks
+			const closingBracketNodes = parent.getChildren('LinkMark').filter(mark => {
+				const isClosingBracket = state.sliceDoc(mark.from, mark.to) === ']';
+				return isClosingBracket;
+			});
+
+			// URLs can only be hidden if after the last ].
+			const lastClosingBracketIdx = closingBracketNodes.length > 0 ? closingBracketNodes[closingBracketNodes.length - 1].from : null;
+			if (!lastClosingBracketIdx || node.from < lastClosingBracketIdx) {
+				return false;
 			}
 		}
 		return true;
