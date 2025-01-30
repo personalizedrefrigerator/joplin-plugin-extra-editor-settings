@@ -11,7 +11,7 @@ const addFormattingClasses = [
 		[`& .${linkClassName}, & .${linkClassName} span`]: {
 			textDecoration: 'underline',
 		},
-		[`& .${strikethroughClassName}`]: {
+		[`& .${strikethroughClassName}, & .${strikethroughClassName} span`]: {
 			textDecoration: 'line-through',
 		},
 	}),
