@@ -86,7 +86,7 @@ const defaultStrings: AppLocalization = {
 	setting__hideMarkdown__description: 'Hides/replaces certain Markdown characters when the cursor is on a different line.',
 	setting__hideMarkdown__none: 'None',
 	setting__hideMarkdown__some: 'Some',
-	setting__hideMarkdown__more: 'More',
+	setting__hideMarkdown__more: 'More (experimental)',
 
 	sync_status__not_syncing: 'Not syncing',
 	sync_status__syncing: 'Syncing...',
