@@ -27,12 +27,12 @@ const toggleCheckbox = (view: EditorView, linePos: number) => {
 };
 
 class CheckboxWidget extends WidgetType {
-	public constructor(private checked: boolean, private depth: number) {
+	public constructor(private checked: boolean, private depth: number, private label: string) {
 		super();
 	}
 
 	public eq(other: CheckboxWidget) {
-		return other.checked == this.checked && other.depth === this.depth;
+		return other.checked == this.checked && other.depth === this.depth && other.label === this.label;
 	}
 
 	private applyContainerClasses(container: HTMLElement) {
@@ -53,6 +53,8 @@ class CheckboxWidget extends WidgetType {
 		const checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
 		checkbox.checked = this.checked;
+		checkbox.ariaLabel = this.label;
+		checkbox.title = this.label;
 		container.appendChild(checkbox);
 
 		checkbox.oninput = () => {
@@ -116,7 +118,10 @@ const replaceCheckboxes = [
 			};
 
 			if (node.name === 'TaskMarker') {
-				return new CheckboxWidget(markerIsChecked(node), parentTags.get('ListItem') ?? 0);
+				const containerLine = state.doc.lineAt(node.from);
+				const labelText = state.doc.sliceString(node.to, containerLine.to);
+
+				return new CheckboxWidget(markerIsChecked(node), parentTags.get('ListItem') ?? 0, labelText);
 			} else if (node.name === 'Task') {
 				const marker = node.node.getChild('TaskMarker');
 				if (marker && markerIsChecked(marker)) {
