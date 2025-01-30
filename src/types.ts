@@ -12,8 +12,9 @@ export enum SyncIndicatorMode {
 }
 
 export enum HideMarkdownMode {
-	None = 'none',	
-	Some = 'some',	
+	None = 'none',
+	Some = 'some',
+	More = 'more',
 }
 
 export interface PluginSettings {

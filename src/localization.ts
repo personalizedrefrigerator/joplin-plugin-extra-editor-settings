@@ -25,6 +25,7 @@ interface AppLocalization {
 	setting__hideMarkdown__description: string;
 	setting__hideMarkdown__none: string;
 	setting__hideMarkdown__some: string;
+	setting__hideMarkdown__more: string;
 
 	setting__editorMaximumWidth: string;
 	setting__editorMaximumWidth__description: string;
@@ -85,6 +86,7 @@ const defaultStrings: AppLocalization = {
 	setting__hideMarkdown__description: 'Hides/replaces certain Markdown characters when the cursor is on a different line.',
 	setting__hideMarkdown__none: 'None',
 	setting__hideMarkdown__some: 'Some',
+	setting__hideMarkdown__more: 'More (experimental)',
 
 	sync_status__not_syncing: 'Not syncing',
 	sync_status__syncing: 'Syncing...',

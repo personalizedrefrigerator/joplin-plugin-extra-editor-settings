@@ -53,9 +53,17 @@ joplin.plugins.register({
 
 		const contentScriptId = 'cm6-extended-settings';
 		await joplin.contentScripts.register(ContentScriptType.CodeMirrorPlugin, contentScriptId, './contentScript/contentScript.js');
-		await joplin.contentScripts.onMessage(contentScriptId, (message: string|object) => {
-			if (typeof message === 'object') {
-				if ('type' in message && message.type === 'openUrl') {
+		await joplin.contentScripts.onMessage(contentScriptId, async (message: string|object) => {
+			if (typeof message === 'object' && 'type' in message) {
+				if (message.type === 'renderMarkup' && 'markup' in message) {
+					if (typeof message.markup !== 'string') {
+						throw new Error(`Invalid markup type in message: ${typeof message.markup}`);
+					}
+
+					const markdown = 1;
+					const rendered = await joplin.commands.execute('renderMarkup', markdown, message.markup);
+					return rendered;
+				} else if (message.type === 'openUrl') {
 					if (!('url' in message) || typeof message.url !== 'string') {
 						throw new Error('Message is missing URL property or URL is not a string.');
 					}

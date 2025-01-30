@@ -28,6 +28,7 @@
     "@joplin/fork-uslug": "^1.0.22",
     "@types/jest": "^29.5.14",
     "@types/node": "^18.7.13",
+    "dompurify": "^3.2.3",
     "chalk": "^4.1.0",
     "copy-webpack-plugin": "^11.0.0",
     "fs-extra": "^10.1.0",
