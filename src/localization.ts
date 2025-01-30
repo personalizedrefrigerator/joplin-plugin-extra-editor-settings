@@ -83,7 +83,7 @@ const defaultStrings: AppLocalization = {
 	setting__showVisualSyncIndicator__icon: 'With an icon',
 
 	setting__hideMarkdown: 'Hide Markdown',
-	setting__hideMarkdown__description: 'Hides/replaces certain Markdown characters when the cursor is on a different line.',
+	setting__hideMarkdown__description: 'Hides/replaces certain Markdown characters when the cursor is on a different line.\n\nWhen set to "Some", only some Markup is rendered. When set to "More", somewhat more Markup is rendered, though may not be rendered correctly.',
 	setting__hideMarkdown__none: 'None',
 	setting__hideMarkdown__some: 'Some',
 	setting__hideMarkdown__more: 'More (experimental)',
