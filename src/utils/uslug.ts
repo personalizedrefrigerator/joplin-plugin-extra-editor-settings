@@ -9,13 +9,32 @@
  * to you with a copy of this software.
  */
 
-const nodeEmoji = require('node-emoji')
+const nodeEmoji = require('node-emoji');
+
+// Very old browsers may not support
+// \p{} regexes.
+let regexes_;
+try {
+    regexes_ = {
+        L: new RegExp('\\p{L}', 'u'),
+        N: new RegExp('\\p{N}', 'u'),
+        Z: new RegExp('\\p{Z}', 'u'),
+        M: new RegExp('\\p{M}', 'u'),
+    };
+} catch (error) {
+    console.error(error);
+    regexes_ = undefined;
+}
 
 const _unicodeCategory = function (c: string) {
-    if (c.match(/\p{L}/u)) return 'L';
-    if (c.match(/\p{N}/u)) return 'N';
-    if (c.match(/\p{Z}/u)) return 'Z';
-    if (c.match(/\p{M}/u)) return 'M';
+    if (!regexes_) {
+        console.warn('Unicode RegExps not loaded. Skipping category check.');
+        return undefined;
+    }
+
+    for (const [key, val] of Object.entries(regexes_)) {
+        if (c.match(val)) return key;
+    }
     return undefined;
 };
 
