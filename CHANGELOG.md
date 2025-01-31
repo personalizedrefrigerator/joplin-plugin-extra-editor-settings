@@ -1,3 +1,13 @@
+# v1.10.0
+
+- Hidden Markdown mode:
+	- Added a new, experimental "More" mode, which hides images and math expressions.
+	- Fixed an issue where strikethrough within links wasn't correctly rendered (https://github.com/personalizedrefrigerator/joplin-plugin-extra-editor-settings/issues/23).
+	- Gave bullet points their Markup (https://github.com/personalizedrefrigerator/joplin-plugin-extra-editor-settings/issues/22).
+	- Place the cursor in a consistent location when Markdown elements become visible (https://github.com/personalizedrefrigerator/joplin-plugin-extra-editor-settings/issues/9).
+- Other changes
+	- **Link tooltip**: Decreased bundle size by forking `@joplin/fork-uslug` (used for "jump to header").
+
 # v1.9.0
 
 - Hidden Markdown mode:
