@@ -1,5 +1,5 @@
 import { EditorState, Line } from "@codemirror/state";
-const uslug = require('@joplin/fork-uslug');
+import uslug from "../../../utils/uslug";
 
 /** Searches the given `state` for a line that matches the target link. */
 const findLineMatchingLink = (link: string, state: EditorState): Line|null => {
