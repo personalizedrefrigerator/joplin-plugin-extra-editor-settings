@@ -65,12 +65,14 @@ const replaceBulletLists = [
 
 			'& > .content': {
 				'position': 'absolute',
-				'top': '0',
 				'left': '0',
 
 				'--size': '4px',
 				// Push the content to the center of the container
-				'margin-top': 'calc(100% + calc(var(--size) / 2))',
+				'--vertical-offset': 'calc(50% - calc(var(--size) / 2))',
+				'top': 'var(--vertical-offset)',
+				'bottom': 'var(--vertical-offset)',
+
 				'width': 'var(--size)',
 				'height': 'var(--size)',
 				'box-sizing': 'border-box',
