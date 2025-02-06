@@ -1,3 +1,9 @@
+# v1.10.1
+
+- Hidden Markdown mode:
+	- Fixed bullet points are positioned incorrectly in monospace fonts.
+	- Fixed images don't reload until the editor is closed and reopened. Rendered images are no longer cached for longer than 1s.
+
 # v1.10.0
 
 - Hidden Markdown mode:
