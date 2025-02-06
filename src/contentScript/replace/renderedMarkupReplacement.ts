@@ -136,11 +136,25 @@ class RenderedMarkupWidget extends WidgetType {
 
 
 export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
-	const renderingCache = new Map<string, string>();
+	type CacheEntry = { value: string, expiresAt: number };
+	const renderingCache = new Map<string, CacheEntry>();
+	const removeOldCacheItems = () => {
+		const keyIterator = renderingCache.keys();
+		while (renderingCache.size > 500) {
+			renderingCache.delete(keyIterator.next().value);
+		}
+	};
+
 	const renderingContext: RenderingContext = {
 		renderMarkup: async (markup: string) => {
-			if (renderingCache.has(markup)) {
-				return renderingCache.get(markup)!;
+			const cacheEntry = renderingCache.get(markup);
+			if (cacheEntry) {
+				const isOld = cacheEntry.expiresAt < performance.now();
+				if (isOld) {
+					renderingCache.delete(markup);
+				} else {
+					return cacheEntry.value;
+				}
 			}
 
 			const renderResult = (await postMessage({
@@ -150,8 +164,17 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			if (renderResult === null) {
 				return null;
 			} else {
-				const html = renderResult.html;
-				renderingCache.set(markup, html);
+				const html: string = renderResult.html;
+				removeOldCacheItems();
+
+				const isImage = html.toLowerCase().includes('<img');
+				renderingCache.set(markup, {
+					value: html,
+					// Reload cached images more frequently than other content -- images can be changed
+					// externally (and render differently after this happens).
+					expiresAt: performance.now() + (isImage ? 1000 : 1000 * 60),
+				});
+
 				return html;
 			}
 		},
