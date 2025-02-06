@@ -13,7 +13,8 @@
 	"categories": [ "editor" ],
 	"screenshots": [
 		{ "src": "images/screenshot.png", "label": "Screenshot: Shows line numbers, autocomplete, and folding in use" },
-		{ "src": "images/screenshot-settings.png", "label": "Screenshot: Shows the available settings: line numbers, code folding, autocomplete, highlight line gutter, highlight active line, highlight spaces, highlight trailing spaces, and more." }
+		{ "src": "images/screenshot-settings.png", "label": "Screenshot: Shows the available settings: line numbers, code folding, autocomplete, highlight line gutter, highlight active line, highlight spaces, highlight trailing spaces, and more." },
+		{ "src": "images/screenshot-hidden-md.png", "label": "Screenshot: Shows math, headers, links, rendered as Markdown." }
 	],
 	"icons": {
 		"128": "images/icon-128.png",
