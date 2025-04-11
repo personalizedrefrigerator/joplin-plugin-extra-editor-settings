@@ -6,6 +6,7 @@ import replaceBulletLists from "./replaceBulletLists";
 import replaceCheckboxes from "./replaceCheckboxes";
 import replaceDividers from "./replaceDividers";
 import replaceFormatCharacters from "./replaceFormatCharacters";
+import replaceHTMLComments from './replaceHTMLComments';
 
 export default (mode: HideMarkdownMode, postMessage: PostMessageHandler) => {
 	const base = [
@@ -14,6 +15,7 @@ export default (mode: HideMarkdownMode, postMessage: PostMessageHandler) => {
 		replaceFormatCharacters,
 		replaceDividers,
 		addFormattingClasses,
+		replaceHTMLComments,
 	];
 
 	if (mode === HideMarkdownMode.Some) {
