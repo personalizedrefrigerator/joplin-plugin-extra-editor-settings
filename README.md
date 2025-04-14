@@ -38,5 +38,8 @@ In particular, setting "Hide Markdown" to "Some", makes the following changes:
   ![screenshot: "Bold, italic, and code" repeated twice. First, with formatting characters, second without.](https://github.com/user-attachments/assets/821b6bcc-3338-43cc-a1a0-f927b50c399c)
 - **Blockquotes:** `>`s are hidden:  
   ![screenshot: Blockquote containing "This is a blockquote!" is shown twice. The first time with the leading ">", the second time without.](https://github.com/user-attachments/assets/d15c10f9-2d8c-4f27-8c87-b6801bf528c2)
-
+- **HTML comment lines:** `<!-- comment -->` are hidden:  
+  ![screenshot: html comment on a single line](./images/screenshot_comment_single_line.png)
+- **HTML comment blocks** are hidden:  
+  ![screenshot: html comment over multiple lines](./images/screenshot_comment_multi_line.png)
 
