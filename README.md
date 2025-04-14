@@ -39,12 +39,12 @@ In particular, setting "Hide Markdown" to "Some", makes the following changes:
 - **Blockquotes:** `>`s are hidden:  
   ![screenshot: Blockquote containing "This is a blockquote!" is shown twice. The first time with the leading ">", the second time without.](https://github.com/user-attachments/assets/d15c10f9-2d8c-4f27-8c87-b6801bf528c2)
 - **HTML comment blocks:** `<!-- comment -->` are hidden:
-  - Single line comment:  
-    ![screenshot: html comment on a single line visible because the cursor is on it](./images/comment_visible_single_line.png)
-    ![screenshot: html comment on a single line hidden](./images/comment_hidden_single_line.png)
-  - Multi line comment:
-    ![screenshot: html comment over multiple lines visible because the cursor is on it](./images/comment_visible_multi_line.png)
-    ![screenshot: html comment over multiple lines hidden](./images/comment_hidden_multi_line.png)
+  - Single-line comment:  
+    ![screenshot: html comment on a single line visible because the cursor is on it](./images/comment_visible_single_line.png)  
+    ![screenshot: html comment on a single line hidden](./images/comment_hidden_single_line.png)  
+  - Multi-line comment:  
+    ![screenshot: html comment over multiple lines visible because the cursor is on it](./images/comment_visible_multi_line.png)  
+    ![screenshot: html comment over multiple lines hidden](./images/comment_hidden_multi_line.png)  
 
 
 
