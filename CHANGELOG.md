@@ -1,3 +1,11 @@
+# v1.11.0
+
+- Hidden Markdown mode:
+    - Support hiding comments (by @jeroenkroesen).
+    - Hide `==`s surrounding highlighted text.
+- Dependencies
+    - Update DOMPurify to v3.2.5
+
 # v1.10.1
 
 - Hidden Markdown mode:
