@@ -2,7 +2,6 @@
 	"manifest_version": 1,
 	"id": "io.github.personalizedrefrigerator.codemirror6-settings",
 	"app_min_version": "3.0.3",
-	"mobile_min_version": "3.0",
 	"version": "1.11.0",
 	"name": "Extra Markdown editor settings",
 	"description": "Line numbers, code folding, space highlighting, word count, and other options for the CodeMirror 6 editor.",
