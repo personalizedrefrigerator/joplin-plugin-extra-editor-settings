@@ -565,6 +565,26 @@ export interface CodeMirrorControl {
 		 * Creates an extension that enables or disables [`languageData`-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
 		 */
 		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
+
+		/**
+		 * A CodeMirror [facet](https://codemirror.net/docs/ref/#state.EditorState.facet) that contains
+		 * the ID of the note currently open in the editor.
+		 *
+		 * Access the value of this facet using
+		 * ```ts
+		 * const noteIdFacet = editorControl.joplinExtensions.noteIdFacet;
+		 * const editorState = editorControl.editor.state;
+		 * const noteId = editorState.facet(noteIdFacet);
+		 * ```
+		 */
+		noteIdFacet: any;
+
+		/**
+		 * A CodeMirror [StateEffect](https://codemirror.net/docs/ref/#state.StateEffect) that is
+		 * included in a [Transaction](https://codemirror.net/docs/ref/#state.Transaction) when the
+		 * note ID changes.
+		 */
+		setNoteIdEffect: any;
 	};
 }
 
