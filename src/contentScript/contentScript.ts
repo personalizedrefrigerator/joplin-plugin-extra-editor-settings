@@ -8,6 +8,7 @@ import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
 import followLinkTooltip from "./links/followLinkTooltip";
 import replacementExtension from "./replace/replacementExtension";
+import persistentCodeFolding, { codeFoldControl } from "./persistentCodeFolding";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -25,13 +26,9 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 				const textDirection = settings.textDirection ?? TextDirection.Auto;
 				const extensions = [
 					settings.lineNumbers ? [ lineNumbers(), highlightActiveLineGutter(), gutter({}) ] : [],
-					settings.codeFolding ? [
-						codeFolding(),
-						foldGutter(),
-						gutter({}),
-						// Set to [low] to allow Joplin's built-in shortcuts to override
-						Prec.low(keymap.of(foldKeymap)),
-					] : [],
+					settings.codeFolding ? (
+						persistentCodeFolding(codeFoldControl(editorControl, context))
+					) : [],
 					editorControl.joplinExtensions.enableLanguageDataAutocomplete.of(settings.enableAutocomplete),
 					settings.highlightActiveLine ? [
 						highlightActiveLine(),

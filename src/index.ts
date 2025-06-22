@@ -2,6 +2,7 @@ import joplin from 'api';
 import { registerSettings } from './settings';
 import { PluginSettings, SyncIndicatorMode, SyncStatus } from './types';
 import { ContentScriptType } from 'api/types';
+import { ChangedFolds, CodeFold } from './contentScript/persistentCodeFolding';
 
 let registeredSyncListeners = false;
 const registerSyncStatusListeners = async (onStatusChange: (newStatus: SyncStatus)=>void) => {
@@ -17,6 +18,16 @@ const registerSyncStatusListeners = async (onStatusChange: (newStatus: SyncStatu
 		onStatusChange(event.withErrors ? SyncStatus.SyncedWithErrors : SyncStatus.NotSyncing);
 	});
 	registeredSyncListeners = true;
+};
+
+const mergeFolds = (existingFolds: CodeFold[], delta: ChangedFolds) => {
+	if ('folds' in delta) {
+		return delta.folds;
+	} else {
+		for (const fold of existingFolds) {
+
+		}
+	}
 };
 
 joplin.plugins.register({
@@ -69,6 +80,15 @@ joplin.plugins.register({
 					}
 
 					return joplin.commands.execute('openItem', message.url);
+				} else if (message.type === 'onFoldsChanged' && 'noteId' in message && 'changedFolds' in message) {
+					const noteId = message.noteId;
+					if (typeof noteId !== 'string') throw new Error('Invalid noteId type');
+					// TODO: APPLY the changed folds to the note. Store in settings? Store in note data (synced)?
+					const mergedFolds = mergeFolds(await getFoldUserData(noteId), message.changedFolds as any);
+					await setFoldUserData(noteId, mergedFolds);
+				} else if (message.type === 'getFolds' && 'noteId' in message) {
+					// TODO: READ the folds from the note data.
+					return await getFoldUserData(message.noteId);
 				}
 			} else if (message === 'getSettings') {
 				contentScriptRegistered = true;
