@@ -105,6 +105,57 @@ const localizations: Record<string, AppLocalization> = {
 	es: {
 		...defaultStrings,
 	},
+	hr: {
+		settings__appName: 'Dodatne postavke uređivača',
+		settings__description: 'Dodatne postavke za Joplin beta i mobilne Markdown uređivače.',
+		setting__showLineNumber: 'Prikaži brojeve redaka',
+		setting__enableCodeFolding: 'Uključi preklapanje koda',
+		setting__enableAutocomplete: 'Uključi automatsko dovršavanje',
+
+		setting__highlightLineGutter: 'Istakni margine aktivnog retka',
+		setting__highlightLineGutter__description: 'Zahtijeva da je postavka „Prikaži brojeve redaka” uključena.',
+		setting__highlightActiveLine: 'Istakni aktivni redak',
+		setting__highlightSpaces: 'Istakni razmake',
+		setting__highlightTrailingSpaces: 'Istakni završne razmake',
+		setting__highlightSelectionMatches: 'Istakni podudaranja odabira',
+		setting__bracketMatching: 'Istakni poklapajuće zagrade',
+
+		setting__showGridPattern: 'Prikaži uzorak mreže pozadine',
+		setting__showLinkTooltip: 'Prikaži opis poveznice',
+		setting__showLinkTooltip__description: 'Prikazuje opise koji omogućuju otvaranje poveznica ispod kursora',
+		setting__showWordCount: 'Prikaži broj riječi',
+		setting__showVisualSyncIndicator: 'Prikaži vizualni indikator sinkronizacije',
+		setting__showVisualSyncIndicator__description: 'Prikazuje stanje sinkronizacije u Markdown uređivaču.',
+
+		setting__editorMaximumWidth: 'Maksimalna širina uređivača',
+		setting__editorMaximumWidth__description: 'Postavljanje pozitivnog broja (npr. 600) centrirat će uređivač i spriječiti da njegova širina bude veća od ove vrijednosti. Postavi na „bez” da uređivač popuni ekran.',
+		setting__editorMaximumWidth__none: 'Bez',
+
+		setting__textDirection: 'Smjer teksta',
+		setting__textDirection__description: 'Prekida zadani smjer teksta u CodeMirror uređivaču. Za većinu korisnika, ovo bi trebalo biti postavljeno na „Automatski”.',
+		setting__textDirection__auto: 'Automatski',
+		setting__textDirection__leftToRight: 'S lijeva na desno',
+		setting__textDirection__rightToLeft: 'S desna na lijevo',
+
+		setting__showVisualSyncIndicator__textual: 'S tekstom',
+		setting__showVisualSyncIndicator__icon: 'S ikonom',
+
+		setting__hideMarkdown: 'Sakrij Markdown',
+		setting__hideMarkdown__description: 'Skriva/zamijenjuje određene Markdown znakove kada se kursor nalazi na jednom drugom retku.\n\nKada je postavljeno na „Neki”, prikazuje se samo dio markup-a. Kada je postavljeno na „Više”, prikazuje se nešto više markup-a, ali možda neće ispravno prikazati',
+		setting__hideMarkdown__none: 'Bez',
+		setting__hideMarkdown__some: 'Neki',
+		setting__hideMarkdown__more: 'Više (eksperimentalno)',
+
+		sync_status__not_syncing: 'Ne sinkronizira se',
+		sync_status__syncing: 'Sinkronizacija je u tijeku …',
+		sync_status__synced_with_errors: 'Sinkronizacija nije uspjela',
+
+		link__followUrl(url) { return `Prati vezu: ${url}`; },
+
+		words: 'Riječi',
+		yes: 'Da',
+		no: 'Ne',
+	},
 };
 
 let localization: AppLocalization | undefined;
