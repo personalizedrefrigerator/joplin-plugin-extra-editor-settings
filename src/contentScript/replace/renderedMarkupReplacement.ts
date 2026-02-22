@@ -3,6 +3,7 @@ import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import * as DOMPurify from 'dompurify';
 import { PostMessageHandler } from '../../../api/types';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
+import makeImagePreviewExtension from './utils/makeImagePreviewExtension';
 
 interface CancelEvent {
 	cancelled: boolean;
@@ -219,10 +220,10 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 		}),
 		makeInlineReplaceExtension({
 			createDecoration: (node, state) => {
-				if (node.name === 'InlineMath' || node.name === 'Image') {
+				if (node.name === 'InlineMath') {
 					const nodeText = state.sliceDoc(node.from, node.to);
 					return new RenderedMarkupWidget(nodeText, renderingContext, {
-						extractMath: node.name === 'InlineMath',
+						extractMath: true,
 					});
 				}
 				return null;
@@ -239,6 +240,11 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 				}
 				return null;
 			},
+		}),
+		...makeImagePreviewExtension({
+			createWidget: (nodeText) => new RenderedMarkupWidget(nodeText, renderingContext, {
+				block: true,
+			}),
 		}),
 	];
 };
