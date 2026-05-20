@@ -30,7 +30,7 @@ In particular, setting "Hide Markdown" to "Some", makes the following changes:
   ![screenshot: Checkboxes are shown to the left of checklist items](https://github.com/user-attachments/assets/a1e31328-e50c-4434-991d-57e2baa88248)
 - **Links:** In links in `[title](url)` format, URLs and brackets are hidden:  
   ![screenshot: Link URLs are hidden when the cursor is on a different line](https://github.com/user-attachments/assets/e7394fed-db23-4d25-a7c2-3570ab39f486)  
-  At present, clicking links does not follow them, but clicking their optional tooltip does (Options → Plugins → Extra Markdown editor settings → enable "Show link tooltip"), making following markdown links possible in markdown editor mode.
+  At present, clicking links does not follow them, but clicking their optional tooltip does (Options → Plugins → Extra Markdown editor settings → enable "Show link tooltip"), making following markdown links possible in markdown editor mode on mobile.
 - **Headings:** `#`s are hidden:  
    ![screenshot: A Markdown heading labeled "Test" with a "#" character, headings level 1-4 shown without.](https://github.com/user-attachments/assets/d2841a34-aa32-45dd-9611-40a37bb8cc95)  
    Above, the cusror is on the same line as the `# Test` heading. As a result, its leading `#` markup is visible.
