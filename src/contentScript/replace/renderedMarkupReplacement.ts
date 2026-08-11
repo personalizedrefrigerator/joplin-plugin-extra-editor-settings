@@ -3,7 +3,7 @@ import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import * as DOMPurify from 'dompurify';
 import { PostMessageHandler } from '../../../api/types';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
-import makeImagePreviewExtension from './utils/makeImagePreviewExtension';
+import makeImagePreviewExtension, { ImageDimensions } from './utils/makeImagePreviewExtension';
 
 interface CancelEvent {
 	cancelled: boolean;
@@ -16,6 +16,7 @@ interface RenderingContext {
 interface MarkupWidgetOptions {
 	extractMath?: boolean;
 	block?: boolean;
+	imageDimensions?: ImageDimensions;
 }
 
 const sanitize = (html: string) => {
@@ -70,7 +71,34 @@ class RenderedMarkupWidget extends WidgetType {
 	}
 
 	public eq(other: RenderedMarkupWidget) {
-		return other.markup === this.markup && this.options?.block === other.options?.block;
+		return other.markup === this.markup
+			&& this.options?.block === other.options?.block
+			&& this.options?.imageDimensions?.width === other.options?.imageDimensions?.width
+			&& this.options?.imageDimensions?.height === other.options?.imageDimensions?.height;
+	}
+
+	private applyImageDimensions(root: HTMLElement) {
+		const dimensions = this.options?.imageDimensions;
+		if (!dimensions) {
+			return;
+		}
+
+		const image = root.querySelector('img');
+		if (!image) {
+			return;
+		}
+
+		const toCssSize = (value: string) => /^\d+(?:\.\d+)?$/.test(value) ? `${value}px` : value;
+		if (dimensions.width) {
+			image.style.setProperty('width', toCssSize(dimensions.width), 'important');
+			// The theme caps images at max-width:100%/max-height:50vh, which would
+			// otherwise silently override an explicit size. Lift the caps for this image.
+			image.style.setProperty('max-width', 'none', 'important');
+		}
+		if (dimensions.height) {
+			image.style.setProperty('height', toCssSize(dimensions.height), 'important');
+			image.style.setProperty('max-height', 'none', 'important');
+		}
 	}
 
 	private render() {
@@ -116,9 +144,11 @@ class RenderedMarkupWidget extends WidgetType {
 
 		if (this.sanitizedHtml) {
 			content.innerHTML = this.sanitizedHtml;
+			this.applyImageDimensions(content);
 		} else {
 			void this.render().then(() => {
 				content.innerHTML = this.sanitizedHtml;
+				this.applyImageDimensions(content);
 				view.requestMeasure();
 			});
 		}
@@ -242,8 +272,9 @@ export const renderedMarkupReplacement = (postMessage: PostMessageHandler) => {
 			},
 		}),
 		...makeImagePreviewExtension({
-			createWidget: (nodeText) => new RenderedMarkupWidget(nodeText, renderingContext, {
+			createWidget: (nodeText, dimensions) => new RenderedMarkupWidget(nodeText, renderingContext, {
 				block: true,
+				imageDimensions: dimensions,
 			}),
 		}),
 	];
