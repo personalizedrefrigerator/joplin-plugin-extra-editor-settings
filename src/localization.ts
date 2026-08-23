@@ -27,6 +27,9 @@ interface AppLocalization {
 	setting__hideMarkdown__some: string;
 	setting__hideMarkdown__more: string;
 
+	setting__underlineMarkup: string;
+	setting__underlineMarkup__description: string;
+
 	setting__editorMaximumWidth: string;
 	setting__editorMaximumWidth__description: string;
 	setting__editorMaximumWidth__none: string;
@@ -88,6 +91,9 @@ const defaultStrings: AppLocalization = {
 	setting__hideMarkdown__some: 'Some',
 	setting__hideMarkdown__more: 'More (experimental)',
 
+	setting__underlineMarkup: 'Render underline syntax (++text++)',
+	setting__underlineMarkup__description: 'Renders ++text++ as underlined text. This setting is independent of "Hide Markdown" and works in all modes.',
+
 	sync_status__not_syncing: 'Not syncing',
 	sync_status__syncing: 'Syncing...',
 	sync_status__synced_with_errors: 'Failed to sync',
@@ -141,10 +147,13 @@ const localizations: Record<string, AppLocalization> = {
 		setting__showVisualSyncIndicator__icon: 'S ikonom',
 
 		setting__hideMarkdown: 'Sakrij Markdown',
-		setting__hideMarkdown__description: 'Skriva/zamijenjuje određene Markdown znakove kada se kursor nalazi na jednom drugom retku.\n\nKada je postavljeno na „Neki”, prikazuje se samo dio markup-a. Kada je postavljeno na „Više”, prikazuje se nešto više markup-a, ali možda neće ispravno prikazati',
+		setting__hideMarkdown__description: 'Skriva/zamijenjuje određene Markdown znakove kada se kursor nalazi na jednom drugom retku.\n\nKada je postavljeno na „Neki", prikazuje se samo dio markup-a. Kada je postavljeno na „Više", prikazuje se nešto više markup-a, ali možda neće ispravno prikazati',
 		setting__hideMarkdown__none: 'Bez',
 		setting__hideMarkdown__some: 'Neki',
 		setting__hideMarkdown__more: 'Više (eksperimentalno)',
+
+		setting__underlineMarkup: 'Prikaži podcrtavanje (++tekst++)',
+		setting__underlineMarkup__description: 'Prikazuje ++tekst++ kao podcrtani tekst. Ova postavka je neovisna o „Sakrij Markdown" i radi u svim načinima.',
 
 		sync_status__not_syncing: 'Ne sinkronizira se',
 		sync_status__syncing: 'Sinkronizacija je u tijeku …',

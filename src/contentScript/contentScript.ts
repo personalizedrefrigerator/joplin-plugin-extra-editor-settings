@@ -8,6 +8,7 @@ import wordCountPanel from "./wordCountPanel";
 import syncIndicatorPanel from "./syncIndicatorPanel";
 import followLinkTooltip from "./links/followLinkTooltip";
 import replacementExtension from "./replace/replacementExtension";
+import replaceUnderline from "./replace/replaceUnderline";
 
 export default (context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
@@ -81,6 +82,8 @@ export default (context: ContentScriptContext): MarkdownEditorContentScriptModul
 					settings.hideMarkdown !== HideMarkdownMode.None ? replacementExtension(settings.hideMarkdown, context.postMessage) : [],
 
 					settings.showLinkTooltip ? followLinkTooltip(onOpenUrl) : [],
+
+					settings.underlineMarkup ? replaceUnderline : [],
 
 					(textDirection !== TextDirection.Auto) ? [
 						EditorView.theme({

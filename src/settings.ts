@@ -140,6 +140,12 @@ export const registerSettings = async (applySettings: (settings: PluginSettings)
 			label: localization.setting__showLinkTooltip,
 			description: localization.setting__showLinkTooltip__description,
 		},
+		underlineMarkup: {
+			...defaultSettingOptions,
+			value: false,
+			label: localization.setting__underlineMarkup,
+			description: localization.setting__underlineMarkup__description,
+		},
 		textDirection: {
 			...defaultSettingOptions,
 			type: SettingItemType.String,
