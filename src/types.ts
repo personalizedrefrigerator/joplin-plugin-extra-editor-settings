@@ -24,6 +24,7 @@ export interface PluginSettings {
 
 	hideMarkdown: HideMarkdownMode;
 	showLinkTooltip: boolean;
+	underlineMarkup: boolean;
 
 	highlightActiveLine: boolean;
 	highlightActiveLineGutter: boolean;
